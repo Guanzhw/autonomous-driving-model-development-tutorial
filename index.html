@@ -417,6 +417,17 @@
         <article class="card"><h4>02 · BEV 融合鲁棒性</h4><p>用合成 camera/LiDAR 特征演示 feature fusion、modality dropout、时间错位和质量感知融合。</p><p class="small"><a href="notebooks/02_sensor_fusion_robustness.ipynb">打开 Notebook →</a></p></article>
         <article class="card"><h4>03 · Flow Matching / Action Chunk</h4><p>用二维轨迹直观理解 flow matching、连续动作 chunk 和积分步数对推理延迟的影响。</p><p class="small"><a href="notebooks/03_flow_matching_action_chunk.ipynb">打开 Notebook →</a></p></article>
         <article class="card"><h4>04 · Corner Case Safety Monitor</h4><p>构造 TTC、置信度、硬约束和 fallback 规则，练习 critical-event recall 与误报代价。</p><p class="small"><a href="notebooks/04_corner_case_safety_monitor.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>05 · 训练与评测基线</h4><p>从可复现的 NumPy MLP 训练走到阈值、F1、ECE 和失败样本分析。</p><p class="small"><a href="notebooks/05_training_evaluation_baseline.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>06 · LiDAR / BEV Occupancy</h4><p>生成带高度的点云，做 BEV rasterization、occupancy IoU 和分辨率/dropout ablation。</p><p class="small"><a href="notebooks/06_lidar_bev_occupancy.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>07 · 时序跟踪与时间对齐</h4><p>用 Kalman Filter 注入 dropout、outlier、timestamp offset 和 innovation gating。</p><p class="small"><a href="notebooks/07_temporal_tracking_alignment.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>08 · 轨迹预测指标</h4><p>比较多模态候选的 ADE、FDE、minADE、minFDE 和 miss rate。</p><p class="small"><a href="notebooks/08_trajectory_prediction_metrics.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>09 · 规划与闭环控制</h4><p>把 reference path 放进 pure-pursuit 闭环，研究 lookahead、速度与噪声。</p><p class="small"><a href="notebooks/09_planning_control_closed_loop.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>10 · 多传感器数据管线</h4><p>用 nuScenes-like tables 组装 sensor bundle，审计缺失、时间偏移和校准引用。</p><p class="small"><a href="notebooks/10_dataset_pipeline_sensor_bundle.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>11 · Closed-loop 评测</h4><p>统一报告 progress、collision、off-road、acceleration、jerk 和 composite score。</p><p class="small"><a href="notebooks/11_closed_loop_evaluation_metrics.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>12 · Corner-case Mining</h4><p>按天气、密度、遮挡、传感器 dropout 和延迟挖掘高风险 slice。</p><p class="small"><a href="notebooks/12_corner_case_mining_scenario_slices.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>13 · VLM Structured Conditions</h4><p>模拟带置信度和 abstain 的 VLM 输出，评估 schema、coverage、precision 和 recall。</p><p class="small"><a href="notebooks/13_vlm_structured_driving_conditions.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>14 · VLA / WA / π0 Interface</h4><p>用行为克隆、action chunk 和 dynamics model 连接 VLA 与 world-action 接口。</p><p class="small"><a href="notebooks/14_vla_world_action_interface.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>15 · 部署画像与量化</h4><p>对比 float32/int8 的 MACs、量化误差、吞吐和 p50/p95/p99 latency。</p><p class="small"><a href="notebooks/15_deployment_profiling_quantization.ipynb">打开 Notebook →</a></p></article>
       </div>
       <div class="callout" style="margin-top:18px"><b>完成标准：</b>每个 notebook 至少保留一张结果图、一段参数分析、一个失败案例和一个你自己实现的 TODO；不要只运行所有 cell 后截图。</div>
     </section>
