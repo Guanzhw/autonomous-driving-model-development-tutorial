@@ -18,9 +18,8 @@
 - “有 safety state machine”是否被误解为功能安全或道路安全证据？
 - “有 latency 数字”是否说明了硬件、batch、warm-up、同步方式和版本？
 - “支持 nuScenes/Waymo/nuPlan/NAVSIM/CARLA”是否真的有 adapter、许可说明、split 和结果？
-- capstone 是否只是在汇总 toy 指标，而没有清晰的失败边界和下一步实验？
+- capstone 是否真的加载前面的 learned artifact，而不只是汇总 toy 指标？失败边界和下一步实验是否清楚？
 
 ## 输出要求
 
 每条发现都给出一个反例或招聘经理可能提出的追问，并给出最小修复：补实验、降低表述、增加证据、延期，或删除不必要的内容。不要为了显得严厉而提出无法在仓库中验证的猜测；反方结论也必须有文件或运行证据。
-

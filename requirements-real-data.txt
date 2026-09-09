@@ -1,0 +1,6 @@
+# Optional real-data checkpoints (Chapters 01, 02 and 08).
+# Download nuScenes mini separately and follow its license/terms.
+-r requirements.txt
+nuscenes-devkit>=1.1.11
+pyquaternion>=0.9.9
+Pillow>=10.0

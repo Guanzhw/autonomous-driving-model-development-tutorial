@@ -1,6 +1,7 @@
-.venv/
+# Notebook/runtime outputs are reproducible and should not be committed.
+artifacts/
 __pycache__/
-.ipynb_checkpoints/
 *.py[cod]
+.ipynb_checkpoints/
+.venv/
 .DS_Store
-

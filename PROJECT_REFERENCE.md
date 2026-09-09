@@ -1,136 +1,128 @@
 # Project Reference
 
-> 这是本项目的长期维护参考。后续修改路线、Notebook、依赖、公开声明或审查流程时，先读本文件；完成修改后同步更新本文件的状态、缺口和变更日志。
+长期维护本项目时先读本文件；它记录路线、证据等级、目录职责、依赖边界和已知缺口。
 
 - **项目**：Autonomous Driving Model Development Tutorial
 - **仓库**：`Guanzhw/autonomous-driving-model-development-tutorial`
 - **目标**：帮助已有深度学习基础的学习者进入 L4 智能驾驶模型开发岗位
-- **当前版本**：L4-oriented model development，26 个交互式 Notebook
+- **当前版本**：11 个核心课程 + 3 个 Advanced Lab；一个 shared urban cut-in artifact chain
 - **上次核对**：2026-09-09
-- **远端基线**：commit `5cf4203`（L4 路线与 Transformer 依赖分层更新）
-- **主入口**：[README](README.md)、[HTML 知识地图](index.html)、[Notebook Track](notebooks/README.md)
-- **审查入口**：[review/README.md](review/README.md)
-- **首轮报告**：[review/initial-dual-review.md](review/initial-dual-review.md)
+- **远端基线**：`6c1155b`（AD domain bridge 版本）
+- **唯一学习入口**：[README](README.md)；核心 syllabus 为 [course/README.md](course/README.md)
+- **维护入口**：[review/README.md](review/README.md)
 
-## 1. 项目定义
+## 1. 项目定义和不变前提
 
-本项目是一个 landing tutorial 和作品集孵化器，不是量产自动驾驶栈、真实车辆验证平台或安全认证材料。
+这是 landing tutorial 和作品集孵化器，不是量产自动驾驶栈、真实车辆验证平台或 safety certification material。
 
-### 学习者背景假设
+学习者已经具备：Python、PyTorch、常见深度学习模型、反向传播、训练/验证、基本概率统计和读写 notebook 的能力。项目不重复完整通用深度学习入门；它补的是智驾领域背景：ego/actor/scene/ODD、传感器和 frame、SE(3)、时间同步、BEV/occupancy、tracking、localization、prediction、planning、closed-loop、数据闭环、安全和 runtime。
 
-项目默认学习者已经具备 Python、常见深度学习模型、反向传播、训练/验证、基本概率统计和 PyTorch 等基础。项目不重复完整的通用深度学习入门；它要补的是自动驾驶的领域背景、数据形态、系统接口和验证方法。
+## 2. 结构决策
 
-因此新增的 `00a–00f` 是 **AD domain bridge**，不是 Python/NumPy/SGD 课程。它们用最小 toy scene 解释自动驾驶语义，再把概念连接到后续深入 Notebook。
+### 2.1 11 + 3，而不是 26 个独立 demo
 
-学习者最终应该能展示：
-
-1. 能把 ODD、坐标系、传感器输入、时间预算、模型输出和降级状态写成明确接口；
-2. 能实现并评估感知、融合、时序、定位、预测、规划或控制中的至少一个模型模块；
-3. 能把数据质量、场景切片、log replay、closed-loop 指标和 failure analysis 接起来；
-4. 能报告模型效果、鲁棒性、p50/p95/p99 延迟、资源约束和已知失效边界；
-5. 能把合成教学实验迁移到公开数据集、公开仿真器或真实项目约束，而不是把 toy result 当成 L4 证据。
-
-## 2. 不变的路线判断
-
-| 判断 | 项目约束 |
-|---|---|
-| L4 主线优先 | 先学 3D/时空感知、多传感器融合、定位、预测/规划、数据闭环、评测、安全和部署，再追逐更大的 foundation model。 |
-| 前沿模型是第二曲线 | VLM、VLA、WA/WAM、World Model、π0 用来建立研究差异化，不替代坐标、时序、闭环和安全基础。 |
-| 系统接口必须显式 | 即使讨论 end-to-end，也要保留传感器、坐标/时间、状态估计、数据、评测和 safety envelope 的接口。 |
-| 合成结果必须诚实标注 | Notebook 的合成数据用于理解机制和测试失败模式；没有真实 benchmark 运行记录时，不宣称达到 nuScenes、nuPlan、NAVSIM、Waymo 或量产水平。 |
-| 预训练模型不是完成证明 | 下载 checkpoint 或调用 `transformers` 不等于掌握模型开发；必须解释输入输出、训练/冻结策略、评测、失效和部署边界。 |
-| 不强行填补不可验证内容 | 对暂时无法实现或没有证据的能力，标记为 roadmap / open gap，不用伪造结果、夸大岗位匹配或半完成实现掩盖。 |
-
-## 3. 当前学习地图
-
-| 阶段 | Notebook | 学习结果 |
+| Canonical chapter | 合并来源/主题 | 教学主问题 |
 |---|---|---|
-| AD domain bridge | `00a–00f` | 智驾系统、传感器/坐标/时间、BEV/occupancy、时序状态、预测/规划/控制、数据/安全/评测/部署的领域入口 |
-| 系统契约 | `00` | ODD、sensor contract、latency budget、状态和降级接口 |
-| 几何与融合 | `01–02` | SE(3)、标定、投影、BEV 和模态缺失/错位鲁棒性 |
-| learned model | `03–05` | action chunk、corner-case monitor、PyTorch Transformer/BEV query、训练和延迟 |
-| 3D 与时序 | `06–07` | LiDAR/BEV occupancy、tracking、outlier、timestamp alignment |
-| 预测与控制 | `08–09` | 轨迹指标、约束规划、闭环控制 |
-| 定位与地图 | `16` | drift、GNSS outage、map matching、relocalization |
-| 场景与数据闭环 | `17`、`10–12` | log replay、scenario sweep、sensor bundle、closed-loop metrics、corner-case mining |
-| 安全与部署 | `18`、`15` | safety state machine、degraded mode、量化和 p50/p95/p99 |
-| 综合交付 | `19` | ODD、场景覆盖、碰撞/fallback/舒适性/延迟的综合报告 |
-| 前沿分支 | `13–14` | VLM structured conditions、VLA/WA/π0 interface；建立在主干完成之后 |
+| `course/00` System & ODD | 系统全景 + ODD/契约 + 数据/安全入口 | 系统究竟在解决什么问题？ |
+| `course/01` Sensors & Geometry | sensors/frames/time + SE(3)/projection | 观测如何进入共同世界？ |
+| `course/02` BEV & Fusion | BEV/occupancy + fusion + LiDAR | 为什么选择这种空间表示？ |
+| `course/03` Temporal State | temporal bridge + tracking/alignment | observation 如何成为 state？ |
+| `course/04` Localization & Mapping | localization/mapping | ego pose 如何保持可用？ |
+| `course/05` Learnable BEV Model | 重写原 Transformer baseline | 如何训练真正有 AD 空间语义的 query？ |
+| `course/06` Prediction | prediction bridge + metrics | 多模态 future 如何度量并供 planner 使用？ |
+| `course/07` Planning & Closed Loop | planning/control bridge + closed loop | action 如何改变下一帧？ |
+| `course/08` Data & Evaluation | bundle + replay + metrics + mining | failure 如何进入可回归数据闭环？ |
+| `course/09` Safety & Runtime | corner monitor + state machine + profiling | accuracy 之外的发布门禁是什么？ |
+| `course/10` Capstone | L4 model development capstone | 如何把 artifact 串成可面试交付？ |
 
-学习地图的权威细节以 [notebooks/README.md](notebooks/README.md) 为准；HTML 用于导航和解释，不应独立定义另一套路线。
+Advanced Labs：`flow_matching_action_chunk`、`vlm_structured_driving_conditions`、`vla_world_action_interface`。它们不能抢在 geometry/state/planning/safety 主线之前。
 
-## 4. 教学梯度
+### 2.2 Shared scene 和 artifact 是课程主线
 
-本项目吸收两种公开课程的组织经验，但不改变“学习者已有深度学习基础”的前提：
+`src/ad_tutorial/scene.py` 是唯一的 toy scene 生成和 BEV 编码入口。坐标约定为 ego `x forward, y left, z up`；所有核心课应复用 `urban_cut_in`，不要重新发明互不兼容的 cube/token/episode。
 
-- 像 [Hugging Face Course](https://huggingface.co/learn/llm-course/chapter1/1) 一样显式写出 prerequisite、阶段目标、概念顺序和每阶段交付物；
-- 像 [fast.ai Practical Deep Learning for Coders](https://course.fast.ai/) 一样先给一个可运行的领域场景，再逐步揭开抽象、接口和指标，而不是从术语表或公式开始；
-- 每个 domain bridge notebook 遵循：`领域问题 → 最小场景 → 术语/接口 → 一个可运行实验 → 失败/扰动 → 下一篇深入 notebook`；
-- `00a–00f` 只补智驾背景，不重复通用反向传播、优化器或 Python 入门；
-- 深入 Notebook 才承担模型机制、指标实现和系统 trade-off，前沿 VLM/VLA/π0 继续放在主线之后。
+`artifacts/urban_cut_in/` 是运行时输出，不提交模型权重或大数据。当前链路：
 
-## 5. 依赖边界
+```text
+00 contract
+ → 01 geometry
+ → 02 BEV dataset
+ → 03 temporal state + 04 localization
+ → 05 learned checkpoint
+ → 06 prediction
+ → 07 planner
+ → 08 evaluation
+ → 09 safety/runtime
+ → 10 capstone
+```
+
+Chapter 05 必须使用 Chapter 02 的 BEV grid；Chapter 10 必须加载 Chapter 05 checkpoint，并检查其配置/输出，而不是只比较手写 policy。
+
+### 2.3 README / HTML / compatibility 文件的职责
+
+- `README.md`：唯一对学习者的总入口和路线摘要；
+- `course/README.md`：11 课的 canonical syllabus、前置 artifact 和产出；
+- `labs/README.md`：3 个 optional labs；
+- `index.html`：薄 landing page，只做导航；不写第二套教学路线；
+- `notebooks/README.md`：旧路径兼容说明，不再列课程清单；
+- `PROJECT_REFERENCE.md`、`review/`：维护者文档，不作为学习入口。
+
+## 3. 依赖边界
 
 | 层 | 文件 | 用途 |
 |---|---|---|
-| Core | `requirements.txt` | NumPy/SciPy/pandas/Matplotlib/Jupyter；支持几何、数据、评测和系统接口实验 |
-| Learned model | `requirements-ml.txt` | 在 Core 上加入 PyTorch，支持 Notebook `03` 的可选 learned 分支和 Notebook `05` |
-| Frontier | `requirements-frontier.txt` | 在 Learned model 上加入 Hugging Face `transformers`、processor/checkpoint 相关依赖 |
+| Core | `requirements.txt` | NumPy/SciPy/pandas/Matplotlib/Jupyter；支持 00–04、06–09 和 labs 机制实验 |
+| Learned model | `requirements-ml.txt` | Core + PyTorch；Chapter 05 和 Chapter 10 checkpoint |
+| Real-data checkpoint | `requirements-real-data.txt` | Core + nuScenes devkit；Chapter 01/02/08 optional sample |
+| Frontier | `requirements-frontier.txt` | Learned model + Hugging Face `transformers` 等；真实 VLM/VLA 扩展 |
 
-`transformers` 是预训练 Transformer/VLM 生态库，不是 attention 数学本身，也不是所有 BEV、tracking、planning 模型的必要依赖。Notebook `05` 用 PyTorch 的 `torch.nn.TransformerEncoder` 直接展示 token、query、self-attention、训练、鲁棒性和 latency；只有加载公开 VLM/VLA backbone 时才进入 Frontier 层。
+`transformers` 不属于所有 AD 模型的必需依赖。Chapter 05 用 `torch.nn.TransformerEncoder` 与 `MultiheadAttention` 学习 token/query/attention/训练/runtime；只有加载预训练 VLM/VLA backbone 才安装 Frontier 层。
 
-## 6. 证据等级
+## 4. 证据等级
 
-维护者在文档、Notebook 和项目简介中使用以下标签：
-
-| 标签 | 含义 | 可以说什么 |
+| 标签 | 含义 | 允许的公开表述 |
 |---|---|---|
 | `toy-mechanism` | 合成数据、最小模型、机制实验 | 能解释接口、趋势和失败模式 |
-| `open-benchmark-ready` | 已有数据/场景适配和明确 split，但尚未在本项目中跑出结果 | 可以说明复现实验计划和指标定义 |
-| `open-benchmark-result` | 有固定 commit、环境、数据版本、脚本和结果文件 | 可以报告可复现的公开 benchmark 结果 |
-| `system-evidence` | 有运行时、资源、闭环、安全策略和回归证据 | 可以讨论工程 trade-off；仍不能自动推出道路安全认证 |
+| `open-benchmark-ready` | 有公开数据/runner adapter、固定 split/命令，但未提交结果 | 可以说明复现实验计划 |
+| `open-benchmark-result` | 有固定 commit、环境、数据版本、脚本和结果文件 | 可以报告该公开 benchmark 的结果 |
+| `system-evidence` | 有 runtime、资源、闭环、安全策略和回归证据 | 可以讨论 trade-off，仍不自动推出道路安全认证 |
 
-当前新增 AD domain bridge 和 L4 Notebook 主要属于 `toy-mechanism`，Notebook `19` 是交付格式演练，不应被描述成真实 L4 验证。
+当前 11 课和 labs 的默认结果是 `toy-mechanism`。nuScenes mini checkpoint 是 `open-benchmark-ready` scaffolding，除非在仓库中提交固定 sample 的输出，否则不得称为已复现 benchmark。
 
-## 7. 维护规则
+## 5. 维护规则
 
-每次修改路线、Notebook、依赖或公开声明时：
+每次修改课程、目录、依赖或公开声明时：
 
-1. 更新对应 Notebook、`notebooks/README.md`、`README.md`、`index.html` 和本文件中受影响的部分；
-2. 明确新增内容的证据等级、学习前提和已知限制；
-3. 运行全部 26 个 Notebook 的 nbformat、AST 和 code-cell CPU 验证，以及 HTML 链接检查；
-4. 让 Reviewer 和 Devil's Advocate 独立审查，不能由实现者自己把“已实现”当成“已验证”；
-5. 把剩余问题写入审查报告或 GitHub issue，不隐藏在 prose 中；
-6. 在变更日志中记录日期、commit、变更、证据和未解决问题。
+1. 更新受影响 notebook、`course/README.md`、`labs/README.md`、根 README、HTML 和本文件；
+2. 维护 shared scene 的坐标/时间语义和 artifact schema，不创建平行 toy pipeline；
+3. 明确证据等级、学习前提、数据许可和未解决问题；
+4. 运行 `python scripts/build_course_notebooks.py`（若改了生成器），再运行结构校验；
+5. 路线/依赖变化时按 14 个 canonical notebook 做 nbformat + AST 检查；按顺序执行所有不依赖外部数据的 code cells；Chapter 05/10 另做 PyTorch smoke test；
+6. 运行 `git diff --check`；
+7. 触发 Reviewer 与 Devil's Advocate 的独立审查；实现者不得替代任一角色签字；
+8. 将 real-data、runtime、safety 和真实 runner 缺口写入 review/reference，不用 prose 掩盖。
 
-最小本地检查：
+最小命令：
 
 ```bash
+python scripts/build_course_notebooks.py
+python scripts/validate_project.py
 git diff --check
-python -m py_compile scripts/build_l4_update.py
-python -m jupyter nbconvert --to notebook --execute notebooks/<changed_notebook>.ipynb --stdout >/dev/null
 ```
 
-全量执行和审查流程见 [review/README.md](review/README.md)。
+## 6. 当前明确缺口
 
-## 8. 当前明确缺口
+- nuScenes mini adapter 目前是 checkpoint scaffolding，仍需实际下载数据、固定 sample、输出图和结果 artifact；
+- 尚未集成 nuPlan/NAVSIM/CARLA 的真实 runner 和公开 failure replay；
+- runtime 仍是 Python/CPU 教学画像，缺少 C++/CUDA/TensorRT、固定车端硬件、显存和版本回归；
+- safety state machine 是机制教学，不是 ISO 26262/SOTIF safety case；
+- 真实 VLM/VLA/World Model checkpoint、冻结/微调、结构化输出和闭环对照属于 Advanced Lab 后续工作；
+- 角色定向 portfolio（perception/fusion、prediction/planning、data/evaluation、runtime/safety）仍需各自补一个真实公开 benchmark。
 
-这些是项目下一阶段的真实工作项，而不是本版本可以默认为已完成的能力：
-
-- 至少一个公开数据集的端到端适配、固定 split、坐标/时间清洗和可复现实验记录；
-- nuPlan/NAVSIM/CARLA 等公开 runner 的 adapter，以及真实 failure replay artifact；
-- C++/CUDA/TensorRT 或等价 runtime profiling，包含显存、吞吐、batch=1 延迟和版本回归；
-- 更接近生产的 tracking/localization/planning 组件和跨模块接口测试；
-- 数据版本、场景 schema、hard-negative mining 和模型/数据闭环的自动化 CI；
-- 按岗位方向拆分的 portfolio project：perception/fusion、prediction/planning、data/evaluation、runtime/safety；
-- 对 VLM/VLA/World Model 分支增加真实 checkpoint 的加载、冻结/微调、结构化输出约束和闭环对照实验。
-
-缺口存在并不意味着当前教程无效；它决定了项目描述中应该使用“机制教程/公开 benchmark 准备/工程化 roadmap”哪一种表述。
-
-## 9. 变更日志
+## 7. 变更日志
 
 | 日期 | 版本/commit | 变更 | 证据与遗留问题 |
 |---|---|---|---|
-| 2026-09-09 | `5cf4203` | 增加 L4 主干 Notebook `00`、`16–19`；把 `05` 升级为 PyTorch Transformer/BEV Query；拆分 Core/ML/Frontier 依赖。 | 20 个 Notebook 已通过本地 CPU 执行验证；仍以合成教学实验为主。 |
-| 2026-09-09 | pending | 建立项目参考、Reviewer/Devil's Advocate 角色和 PR 审查门禁。 | 初始双角色审查报告待完成；后续以报告中的 P0/P1/P2 为维护队列。 |
-| 2026-09-09 | pending | 根据反馈增加 `00a–00f` AD domain bridge，明确深度学习背景假设，重排学习入口。 | 6 个桥接 Notebook 已独立通过 nbformat、AST 和 CPU 执行；需要同步 README/HTML 并完成 26 个 Notebook 的全量检查。 |
+| 2026-09-09 | `5cf4203` | L4 主线、PyTorch Transformer baseline、依赖分层。 | 早期 20 个 notebook；以合成机制为主。 |
+| 2026-09-09 | `6c1155b` | 增加 00A–00F AD domain bridge、项目参考、双角色 review 门禁。 | 26 个 notebook；暴露出路线过度展开和重复 pipeline。 |
+| 2026-09-09 | pending | 依据结构性评审收敛为 11 core + 3 labs；融合 domain bridge；统一 urban cut-in；重写 Chapter 05；capstone 加载 checkpoint；HTML 瘦身；加入 real-data checkpoint scaffolding。 | 当前默认证据仍为 `toy-mechanism`；待全量结构/AST/执行与双角色 follow-up review。 |

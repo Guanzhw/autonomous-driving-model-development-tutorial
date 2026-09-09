@@ -64,7 +64,7 @@ Status: fix-now / record-and-park / reject
 - Devil's Advocate 没有指出未标注的过度承诺、错误路线或“toy result = L4 evidence”；
 - `PROJECT_REFERENCE.md` 的路线、缺口和变更日志已同步。
 
-GitHub Actions 的 structural check 会自动检查 nbformat、Python syntax、26 个 Notebook 的文档链接和审查资产；它不代替本地的全量 code-cell 执行。涉及模型或依赖的变更，仍需在本地运行 CPU smoke test，并把结果写进 PR 或审查报告。
+GitHub Actions 的 structural check 会自动检查 nbformat、Python syntax、14 个 canonical Notebook 的文档链接和审查资产；它不代替本地的全量 code-cell 执行。涉及模型或依赖的变更，仍需在本地运行 CPU smoke test，并把结果写进 PR 或审查报告。`course/` 是核心路线，`labs/` 是选修路线；旧 `notebooks/` 只保留兼容说明。
 
 ## 当前审查资产
 

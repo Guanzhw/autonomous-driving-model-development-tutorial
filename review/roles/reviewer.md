@@ -8,7 +8,7 @@
 2. 阅读 diff 和受影响文件；
 3. 运行受影响 Notebook，路线/依赖变化时运行全量 Notebook；
 4. 检查数值、shape、坐标/时间语义、指标定义和随机性；
-5. 检查 README、HTML、Notebook Track、requirements 是否一致；
+5. 检查 README、HTML、`course/README.md`、`labs/README.md` 和 requirements 是否一致；
 6. 检查学习者是否能留下可展示的图、指标、失败案例和 TODO 结果；
 7. 输出带证据的 P0/P1/P2 findings。
 
@@ -25,4 +25,3 @@
 ## 输出要求
 
 不要用“可以进一步完善”代替问题。每条发现都写出文件位置、可复现证据、影响和最小修复。若没有问题，也必须说明实际运行了什么、没有验证什么，以及当前版本能够诚实宣称的范围。
-

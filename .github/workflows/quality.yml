@@ -17,6 +17,9 @@ jobs:
           python-version: "3.11"
       - name: Install structural validator dependency
         run: python -m pip install --disable-pip-version-check nbformat
+      - name: Check generated notebooks are reproducible
+        run: |
+          python scripts/build_course_notebooks.py
+          git diff --exit-code -- course labs
       - name: Validate notebooks and maintenance artifacts
         run: python scripts/validate_project.py
-

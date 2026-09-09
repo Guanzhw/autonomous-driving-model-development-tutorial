@@ -125,5 +125,42 @@ There is no unresolved P0. The maintenance changes can be merged because they im
 - **Priority**: P1
 - **Feedback**: the project assumed deep-learning ability correctly, but still assumed too much autonomous-driving context between its topic notebooks. Compared with HF Course and fast.ai, it introduced domain abstractions without enough orientation, motivation and bridge experiments.
 - **Evidence**: the previous route entered ODD/SE(3)/BEV/Transformer as if `ego`, `actor`, `scene`, `sensor frame`, `timestamp`, `agent state`, `trajectory` and `closed-loop` were already familiar.
-- **Minimal fix**: add six AD-domain bridge notebooks—`00a–00f`—covering system overview, sensors/frames/time, BEV/occupancy, temporal state/tracking, prediction/planning/control, and data/safety/evaluation/deployment. Each bridge points to the next deep-dive notebook and requires a domain checkpoint.
-- **Status**: **fixed in this follow-up**. The project now has 26 notebooks; the learner is still assumed to know deep learning, while the missing autonomous-driving context is explicitly taught.
+- **Minimal fix**: integrate the domain primers into the chapters that consume them, reduce the route to 11 core chapters + 3 Advanced Labs, and make each chapter produce/consume a shared urban cut-in artifact.
+- **Status**: **fixed in this follow-up**. The learner is still assumed to know deep learning, while the missing autonomous-driving context is taught in-place rather than as six extra gates.
+
+## Structural follow-up: compression and cumulative evidence
+
+### R-007 — Canonical route was over-expanded
+
+- **Priority**: P1
+- **Location**: previous `notebooks/00a–00f`, README, Notebook Track and HTML
+- **Finding**: adding six domain bridge notebooks solved missing context but created a 26-notebook route with duplicated syllabus maintenance and weak cumulative experiments.
+- **Evidence**: previous route had separate toy actors, cubes and random token tasks; `notebooks/README.md`, README and HTML all carried route detail.
+- **Minimal fix**: canonicalize `course/` (11) and `labs/` (3), make README the only learner entry, slim HTML, retain `notebooks/README.md` only as a compatibility notice.
+- **Status**: **fixed in this follow-up**.
+
+### R-008 — The learned model and capstone needed actual semantic inheritance
+
+- **Priority**: P1
+- **Location**: `course/05_learnable_bev_model.ipynb`, `course/10_capstone.ipynb`
+- **Finding**: a Transformer demo is not an AD model exercise if its labels are arbitrary token statistics; a capstone is weak if it only compares hand-written policies.
+- **Evidence**: Chapter 05 now reads `02_bev_dataset.npz`, predicts occupancy/risk/velocity per BEV cell, saves `05_bev_model.pt`; Chapter 10 loads that checkpoint and runs an inference before summarizing prediction/planning/safety artifacts.
+- **Minimal fix**: preserve the shared model class in `src/ad_tutorial/bev_model.py`, keep checkpoint config/metrics, and fail loudly when chain artifacts are missing.
+- **Status**: **fixed in this follow-up**, subject to the PyTorch smoke test.
+
+### DA-006 — Real-data checkpoint is still a boundary, not a benchmark result
+
+- **Priority**: P1
+- **Location**: Chapters 01, 02 and 08; `requirements-real-data.txt`
+- **Challenge**: a nuScenes adapter/checkpoint cell can be mistaken for a completed public-data integration.
+- **Evidence**: the cells explicitly skip without `NUSCENES_ROOT`, record required metadata and state that no result is claimed.
+- **Minimal fix**: run one fixed nuScenes mini sample, commit the command/output metadata, then upgrade only that artifact to `open-benchmark-result`.
+- **Status**: **record-and-park**.
+
+## Implementation follow-up evidence
+
+- `scripts/validate_project.py` passes: 14 canonical notebooks under `course/` + `labs/` have valid nbformat and Python AST; README, course/labs maps and thin HTML contain the expected links.
+- A deterministic direct code-cell smoke run passed for 12 notebooks in dependency order, including the shared artifact chain through Chapters 00–04 and 06–09 plus all three labs. This run uses the same Python namespace semantics needed by the cells, with `MPLBACKEND=Agg`.
+- Chapter 05 and Chapter 10 were not executed in this environment because PyTorch is not installed here; they remain a required local/release smoke test under `requirements-ml.txt`. No learned-model result is claimed by this report.
+- nuScenes checkpoints were exercised only in their “data/dependency absent” branch. No `NUSCENES_ROOT` or public-data result artifact was available, so the project keeps them at `open-benchmark-ready` scaffolding.
+- `git diff --check`, generator determinism, Python compilation and the structural validator pass. The Jupyter kernel transport itself was not used for the smoke run because this managed environment terminates the kernel during startup; this is an environment limitation, not evidence that the optional PyTorch path passed.
