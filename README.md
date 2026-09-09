@@ -18,10 +18,12 @@ L4 在这里不是“更大的模型”，而是系统在定义好的 ODD 内能
 | 入口 | 内容 |
 |---|---|
 | [HTML 总教程](index.html) | 岗位画像、系统全景、24 周路线、公开资源和作品集标准 |
+| [项目参考](PROJECT_REFERENCE.md) | 路线判断、证据等级、依赖边界、当前缺口和维护日志 |
 | [Notebook Track 说明](notebooks/README.md) | 20 个 Notebook 的学习顺序、目标和交付物 |
 | [核心依赖](requirements.txt) | NumPy/SciPy + Jupyter，支持基础系统实验 |
 | [学习模型依赖](requirements-ml.txt) | 在核心依赖之上加入 PyTorch，支持 03/05 |
 | [前沿依赖](requirements-frontier.txt) | 在学习模型依赖之上加入 Hugging Face Transformers/VLM 生态 |
+| [Review Protocol](review/README.md) | Reviewer 与 Devil's Advocate 的双角色审查、优先级和合并门禁 |
 
 ## Notebook 路线
 
@@ -97,11 +99,13 @@ jupyter lab
 python -m pip install -r requirements-ml.txt
 ```
 
-如果学习 VLM/VLA/World Model 分支，再安装：
+如果要把 `13–14` 从当前的合成接口扩展为真实 VLM/VLA/World Model checkpoint 或 processor，再安装：
 
 ```bash
 python -m pip install -r requirements-frontier.txt
 ```
+
+当前 `13–14` 为不依赖大型 checkpoint 的机制教学 notebook，本身不强制安装 `transformers`；`requirements-frontier.txt` 为接入真实预训练模型时的扩展层。
 
 Notebook 00–04、06–12、15–19 默认使用合成数据，保证无需下载大型数据集也能运行。完成机制实验后，再接入 nuScenes、Waymo、nuPlan、NAVSIM、CARLA、Autoware、LeRobot、OpenVLA 或 openpi。
 

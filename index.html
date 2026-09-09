@@ -436,7 +436,7 @@
         <article class="card"><h4>19 · L4 Model Development Capstone</h4><p>比较 naive/guarded policy 的 collision、fallback、comfort、p95 latency 和 scenario coverage。</p><p class="small"><a href="notebooks/19_l4_model_development_capstone.ipynb">打开 Notebook →</a></p></article>
       </div>
       <div class="callout" style="margin-top:18px"><b>完成标准：</b>每个 notebook 至少保留一张结果图、一段参数分析、一个失败案例和一个你自己实现的 TODO；Transformer notebook 还要记录参数量、token 数、attention 配置、seed 和 latency 测量方法。</div>
-      <div class="callout" style="margin-top:18px"><b>依赖边界：</b>基础 notebook 只需要 NumPy/SciPy；<code>requirements-ml.txt</code> 才加入 <code>torch</code>，Notebook 05 直接实现 PyTorch Transformer。Hugging Face <code>transformers</code> 放在 <code>requirements-frontier.txt</code>，用于 VLM/VLA/World Model 的预训练 backbone 和 processor，不为了调用一个 attention layer 而强制所有 notebook 安装它。</div>
+      <div class="callout" style="margin-top:18px"><b>依赖边界：</b>基础 notebook 只需要 NumPy/SciPy；<code>requirements-ml.txt</code> 才加入 <code>torch</code>，Notebook 05 直接实现 PyTorch Transformer。Hugging Face <code>transformers</code> 放在 <code>requirements-frontier.txt</code>，用于 VLM/VLA/World Model 的预训练 backbone 和 processor，不为了调用一个 attention layer 而强制所有 notebook 安装它。项目维护参考见 <a href="PROJECT_REFERENCE.md">PROJECT_REFERENCE.md</a>，双角色审查流程见 <a href="review/README.md">Review Protocol</a>。</div>
     </section>
 
     <section id="projects">
@@ -748,7 +748,7 @@ decision:
     </section>
 
     <footer class="footer">
-      本页面为真正的 HTML 文档，包含响应式布局、折叠资源、Mermaid 系统图、MathJax 公式和打印样式。版本：2026-09-07。
+      本页面为真正的 HTML 文档，包含响应式布局、折叠资源、Mermaid 系统图、MathJax 公式和打印样式。版本：2026-09-09。
     </footer>
   </main>
 </body>
