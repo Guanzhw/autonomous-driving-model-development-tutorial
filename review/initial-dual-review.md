@@ -117,3 +117,13 @@ There is no unresolved P0. The maintenance changes can be merged because they im
 2. a reproducible CPU/CUDA environment matrix;
 3. runtime/safety evidence with fixed hardware and failure replay;
 4. role-specific portfolio outputs.
+
+## Feedback follow-up: learning gradient
+
+### R-006 — The route was topic-complete but not sufficiently graduated
+
+- **Priority**: P1
+- **Feedback**: the project assumed deep-learning ability correctly, but still assumed too much autonomous-driving context between its topic notebooks. Compared with HF Course and fast.ai, it introduced domain abstractions without enough orientation, motivation and bridge experiments.
+- **Evidence**: the previous route entered ODD/SE(3)/BEV/Transformer as if `ego`, `actor`, `scene`, `sensor frame`, `timestamp`, `agent state`, `trajectory` and `closed-loop` were already familiar.
+- **Minimal fix**: add six AD-domain bridge notebooks—`00a–00f`—covering system overview, sensors/frames/time, BEV/occupancy, temporal state/tracking, prediction/planning/control, and data/safety/evaluation/deployment. Each bridge points to the next deep-dive notebook and requires a domain checkpoint.
+- **Status**: **fixed in this follow-up**. The project now has 26 notebooks; the learner is still assumed to know deep learning, while the missing autonomous-driving context is explicitly taught.

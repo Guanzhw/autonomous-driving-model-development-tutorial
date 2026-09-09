@@ -18,7 +18,7 @@ import nbformat
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_DIR = ROOT / "notebooks"
-EXPECTED_NOTEBOOKS = 20
+EXPECTED_NOTEBOOKS = 26
 
 
 def notebook_links(text: str) -> set[str]:

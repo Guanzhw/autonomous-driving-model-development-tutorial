@@ -8,7 +8,7 @@
 
 - **L4 主干**：ODD / 系统契约 → 几何与标定 → 3D/BEV 感知 → 多传感器融合 → 时序跟踪 → 定位与地图 → 预测/规划 → 场景回放与闭环评测 → 数据闭环 → 安全降级 → 部署。
 - **前沿分叉**：VLM、VLA、World Model、WA/WAM、Physical Intelligence π0。
-- **学习方式**：HTML 知识地图 + 20 个可运行 Jupyter Notebook + 公开数据/代码资源。
+- **学习方式**：HTML 知识地图 + 26 个可运行 Jupyter Notebook + 公开数据/代码资源。
 - **完成标准**：每个阶段都要有可运行代码、明确指标、参数实验、失败分析和可复现运行记录。
 
 L4 在这里不是“更大的模型”，而是系统在定义好的 ODD 内能够完成任务、识别退化并安全退出。合成 notebook 用于理解机制，不等价于真实车辆验证或安全认证。
@@ -17,9 +17,9 @@ L4 在这里不是“更大的模型”，而是系统在定义好的 ODD 内能
 
 | 入口 | 内容 |
 |---|---|
-| [HTML 总教程](index.html) | 岗位画像、系统全景、24 周路线、公开资源和作品集标准 |
+| [HTML 总教程](index.html) | 岗位画像、系统全景、26 周路线、公开资源和作品集标准 |
 | [项目参考](PROJECT_REFERENCE.md) | 路线判断、证据等级、依赖边界、当前缺口和维护日志 |
-| [Notebook Track 说明](notebooks/README.md) | 20 个 Notebook 的学习顺序、目标和交付物 |
+| [Notebook Track 说明](notebooks/README.md) | 26 个 Notebook 的学习顺序、目标和交付物 |
 | [核心依赖](requirements.txt) | NumPy/SciPy + Jupyter，支持基础系统实验 |
 | [学习模型依赖](requirements-ml.txt) | 在核心依赖之上加入 PyTorch，支持 03/05 |
 | [前沿依赖](requirements-frontier.txt) | 在学习模型依赖之上加入 Hugging Face Transformers/VLM 生态 |
@@ -27,7 +27,20 @@ L4 在这里不是“更大的模型”，而是系统在定义好的 ODD 内能
 
 ## Notebook 路线
 
-### A. L4 系统契约与模型基础
+### A. AD domain bridge：先补智驾背景
+
+这 6 个 Notebook 假设你已经会深度学习，只补自动驾驶的领域语言、数据形态和系统接口。每个都遵循“领域问题 → 最小场景 → 接口/指标 → 扰动实验 → 下一篇深入 Notebook”。
+
+| Notebook | 核心问题 |
+|---|---|
+| [00A · 智能驾驶系统全景](notebooks/00a_autonomous_driving_system_overview.ipynb) | ego、actor、scene、ODD 以及 perception/tracking/prediction/planning/control 如何连接？ |
+| [00B · 传感器、坐标系与时间](notebooks/00b_sensors_frames_and_time.ipynb) | camera/LiDAR/radar/GNSS/IMU 的 frame、标定、同步和 ego-motion 为什么是模型输入契约？ |
+| [00C · BEV / Occupancy / Scene Representation](notebooks/00c_bev_occupancy_and_scene_representation.ipynb) | 为什么要从图像/点云进入 BEV、occupancy、vector/map 和 agent state？ |
+| [00D · 时序场景状态与 Tracking](notebooks/00d_temporal_scene_state_and_tracking.ipynb) | observation 如何变成带 ID、速度和不确定性的 agent state？ |
+| [00E · Prediction → Planning → Control](notebooks/00e_prediction_planning_control_closed_loop.ipynb) | 预测、规划、控制的边界是什么，为什么 closed-loop 会改变问题？ |
+| [00F · 数据、安全、评测与部署](notebooks/00f_data_safety_evaluation_deployment.ipynb) | failure 如何进入数据闭环，以及 accuracy/safety/latency 如何共同决定发布？ |
+
+### B. L4 系统契约与模型基础
 
 | Notebook | 核心问题 |
 |---|---|
@@ -38,7 +51,7 @@ L4 在这里不是“更大的模型”，而是系统在定义好的 ODD 内能
 | [04 · Corner Case Safety Monitor](notebooks/04_corner_case_safety_monitor.ipynb) | TTC、置信度和传感器健康度如何触发 fallback？ |
 | [05 · PyTorch Transformer / BEV Query](notebooks/05_training_evaluation_baseline.ipynb) | 如何真正训练 attention 模型并测量鲁棒性与 latency？ |
 
-### B. 3D、时序、定位与规划
+### C. 3D、时序、定位与规划
 
 | Notebook | 核心问题 |
 |---|---|
@@ -48,7 +61,7 @@ L4 在这里不是“更大的模型”，而是系统在定义好的 ODD 内能
 | [08 · 轨迹预测指标](notebooks/08_trajectory_prediction_metrics.ipynb) | 如何评估多模态、多智能体未来？ |
 | [09 · 规划与闭环控制](notebooks/09_planning_control_closed_loop.ipynb) | 轨迹如何变成带约束的可执行控制？ |
 
-### C. 场景、数据闭环与安全验证
+### D. 场景、数据闭环与安全验证
 
 | Notebook | 核心问题 |
 |---|---|
@@ -60,7 +73,7 @@ L4 在这里不是“更大的模型”，而是系统在定义好的 ODD 内能
 | [15 · 部署画像与量化](notebooks/15_deployment_profiling_quantization.ipynb) | 如何报告 p50/p95/p99、MACs、吞吐和量化误差？ |
 | [19 · L4 Model Development Capstone](notebooks/19_l4_model_development_capstone.ipynb) | 如何交付一套模型、数据、闭环、安全和运行时证据？ |
 
-### D. 前沿分支：建立在主干之上
+### E. 前沿分支：建立在主干之上
 
 | Notebook | 核心问题 |
 |---|---|
@@ -107,16 +120,17 @@ python -m pip install -r requirements-frontier.txt
 
 当前 `13–14` 为不依赖大型 checkpoint 的机制教学 notebook，本身不强制安装 `transformers`；`requirements-frontier.txt` 为接入真实预训练模型时的扩展层。
 
-Notebook 00–04、06–12、15–19 默认使用合成数据，保证无需下载大型数据集也能运行。完成机制实验后，再接入 nuScenes、Waymo、nuPlan、NAVSIM、CARLA、Autoware、LeRobot、OpenVLA 或 openpi。
+Notebook 00A–00F、00–04、06–12、15–19 默认使用合成数据，保证无需下载大型数据集也能运行。完成机制实验后，再接入 nuScenes、Waymo、nuPlan、NAVSIM、CARLA、Autoware、LeRobot、OpenVLA 或 openpi。
 
 ## 推荐学习顺序
 
 1. 先读 HTML 的岗位画像、系统全景、ODD 和依赖边界。
-2. 完成 `00–05`，建立系统契约、坐标、融合、Transformer 和安全 monitor 的共同语言。
-3. 完成 `06–09` 与 `16`，补齐 BEV、时序、定位、预测和规划。
-4. 完成 `17`、`10–12`，建立 scenario runner、数据闭环和 closed-loop evaluation。
-5. 完成 `18`、`15`、`19`，形成安全降级、部署和 L4 capstone 证据。
-6. 最后完成 `13–14`，把 VLM/VLA/WA/π0 接入已经存在的驾驶接口。
+2. 完成 `00A–00F`，建立自动驾驶领域语言、坐标/时间、BEV、tracking、闭环和评测的共同语境。
+3. 完成 `00–05`，把领域语境接到 ODD、融合、corner case monitor 和 PyTorch Transformer。
+4. 完成 `06–09` 与 `16`，补齐 3D、时序、定位、预测和规划。
+5. 完成 `17`、`10–12`，建立 scenario runner、数据闭环和 closed-loop evaluation。
+6. 完成 `18`、`15`、`19`，形成安全降级、部署和 L4 capstone 证据。
+7. 最后完成 `13–14`，把 VLM/VLA/WA/π0 接入已经存在的驾驶接口。
 
 ## Notebook 完成标准
 

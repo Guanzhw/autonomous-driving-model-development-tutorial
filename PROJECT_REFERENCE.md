@@ -5,7 +5,7 @@
 - **项目**：Autonomous Driving Model Development Tutorial
 - **仓库**：`Guanzhw/autonomous-driving-model-development-tutorial`
 - **目标**：帮助已有深度学习基础的学习者进入 L4 智能驾驶模型开发岗位
-- **当前版本**：L4-oriented model development，20 个交互式 Notebook
+- **当前版本**：L4-oriented model development，26 个交互式 Notebook
 - **上次核对**：2026-09-09
 - **远端基线**：commit `5cf4203`（L4 路线与 Transformer 依赖分层更新）
 - **主入口**：[README](README.md)、[HTML 知识地图](index.html)、[Notebook Track](notebooks/README.md)
@@ -15,6 +15,12 @@
 ## 1. 项目定义
 
 本项目是一个 landing tutorial 和作品集孵化器，不是量产自动驾驶栈、真实车辆验证平台或安全认证材料。
+
+### 学习者背景假设
+
+项目默认学习者已经具备 Python、常见深度学习模型、反向传播、训练/验证、基本概率统计和 PyTorch 等基础。项目不重复完整的通用深度学习入门；它要补的是自动驾驶的领域背景、数据形态、系统接口和验证方法。
+
+因此新增的 `00a–00f` 是 **AD domain bridge**，不是 Python/NumPy/SGD 课程。它们用最小 toy scene 解释自动驾驶语义，再把概念连接到后续深入 Notebook。
 
 学习者最终应该能展示：
 
@@ -39,6 +45,7 @@
 
 | 阶段 | Notebook | 学习结果 |
 |---|---|---|
+| AD domain bridge | `00a–00f` | 智驾系统、传感器/坐标/时间、BEV/occupancy、时序状态、预测/规划/控制、数据/安全/评测/部署的领域入口 |
 | 系统契约 | `00` | ODD、sensor contract、latency budget、状态和降级接口 |
 | 几何与融合 | `01–02` | SE(3)、标定、投影、BEV 和模态缺失/错位鲁棒性 |
 | learned model | `03–05` | action chunk、corner-case monitor、PyTorch Transformer/BEV query、训练和延迟 |
@@ -52,7 +59,17 @@
 
 学习地图的权威细节以 [notebooks/README.md](notebooks/README.md) 为准；HTML 用于导航和解释，不应独立定义另一套路线。
 
-## 4. 依赖边界
+## 4. 教学梯度
+
+本项目吸收两种公开课程的组织经验，但不改变“学习者已有深度学习基础”的前提：
+
+- 像 [Hugging Face Course](https://huggingface.co/learn/llm-course/chapter1/1) 一样显式写出 prerequisite、阶段目标、概念顺序和每阶段交付物；
+- 像 [fast.ai Practical Deep Learning for Coders](https://course.fast.ai/) 一样先给一个可运行的领域场景，再逐步揭开抽象、接口和指标，而不是从术语表或公式开始；
+- 每个 domain bridge notebook 遵循：`领域问题 → 最小场景 → 术语/接口 → 一个可运行实验 → 失败/扰动 → 下一篇深入 notebook`；
+- `00a–00f` 只补智驾背景，不重复通用反向传播、优化器或 Python 入门；
+- 深入 Notebook 才承担模型机制、指标实现和系统 trade-off，前沿 VLM/VLA/π0 继续放在主线之后。
+
+## 5. 依赖边界
 
 | 层 | 文件 | 用途 |
 |---|---|---|
@@ -62,7 +79,7 @@
 
 `transformers` 是预训练 Transformer/VLM 生态库，不是 attention 数学本身，也不是所有 BEV、tracking、planning 模型的必要依赖。Notebook `05` 用 PyTorch 的 `torch.nn.TransformerEncoder` 直接展示 token、query、self-attention、训练、鲁棒性和 latency；只有加载公开 VLM/VLA backbone 时才进入 Frontier 层。
 
-## 5. 证据等级
+## 6. 证据等级
 
 维护者在文档、Notebook 和项目简介中使用以下标签：
 
@@ -73,15 +90,15 @@
 | `open-benchmark-result` | 有固定 commit、环境、数据版本、脚本和结果文件 | 可以报告可复现的公开 benchmark 结果 |
 | `system-evidence` | 有运行时、资源、闭环、安全策略和回归证据 | 可以讨论工程 trade-off；仍不能自动推出道路安全认证 |
 
-当前新增 L4 Notebook 主要属于 `toy-mechanism`，Notebook `19` 是交付格式演练，不应被描述成真实 L4 验证。
+当前新增 AD domain bridge 和 L4 Notebook 主要属于 `toy-mechanism`，Notebook `19` 是交付格式演练，不应被描述成真实 L4 验证。
 
-## 6. 维护规则
+## 7. 维护规则
 
 每次修改路线、Notebook、依赖或公开声明时：
 
 1. 更新对应 Notebook、`notebooks/README.md`、`README.md`、`index.html` 和本文件中受影响的部分；
-2. 明确新增内容的证据等级和已知限制；
-3. 运行全部 Notebook 的 nbformat、AST 和 code-cell CPU 验证，以及 HTML 链接检查；
+2. 明确新增内容的证据等级、学习前提和已知限制；
+3. 运行全部 26 个 Notebook 的 nbformat、AST 和 code-cell CPU 验证，以及 HTML 链接检查；
 4. 让 Reviewer 和 Devil's Advocate 独立审查，不能由实现者自己把“已实现”当成“已验证”；
 5. 把剩余问题写入审查报告或 GitHub issue，不隐藏在 prose 中；
 6. 在变更日志中记录日期、commit、变更、证据和未解决问题。
@@ -96,7 +113,7 @@ python -m jupyter nbconvert --to notebook --execute notebooks/<changed_notebook>
 
 全量执行和审查流程见 [review/README.md](review/README.md)。
 
-## 7. 当前明确缺口
+## 8. 当前明确缺口
 
 这些是项目下一阶段的真实工作项，而不是本版本可以默认为已完成的能力：
 
@@ -110,9 +127,10 @@ python -m jupyter nbconvert --to notebook --execute notebooks/<changed_notebook>
 
 缺口存在并不意味着当前教程无效；它决定了项目描述中应该使用“机制教程/公开 benchmark 准备/工程化 roadmap”哪一种表述。
 
-## 8. 变更日志
+## 9. 变更日志
 
 | 日期 | 版本/commit | 变更 | 证据与遗留问题 |
 |---|---|---|---|
 | 2026-09-09 | `5cf4203` | 增加 L4 主干 Notebook `00`、`16–19`；把 `05` 升级为 PyTorch Transformer/BEV Query；拆分 Core/ML/Frontier 依赖。 | 20 个 Notebook 已通过本地 CPU 执行验证；仍以合成教学实验为主。 |
 | 2026-09-09 | pending | 建立项目参考、Reviewer/Devil's Advocate 角色和 PR 审查门禁。 | 初始双角色审查报告待完成；后续以报告中的 P0/P1/P2 为维护队列。 |
+| 2026-09-09 | pending | 根据反馈增加 `00a–00f` AD domain bridge，明确深度学习背景假设，重排学习入口。 | 6 个桥接 Notebook 已独立通过 nbformat、AST 和 CPU 执行；需要同步 README/HTML 并完成 26 个 Notebook 的全量检查。 |

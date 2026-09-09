@@ -203,14 +203,14 @@
         <span class="tag">资料快照：2026-09-09</span>
       </div>
       <div class="hero-actions">
-        <a class="btn primary" href="#roadmap">直接看 24 周路线</a>
+        <a class="btn primary" href="#roadmap">直接看 26 周路线</a>
         <a class="btn" href="#projects">先看作品集项目</a>
         <a class="btn" href="#resources">打开公开资源</a>
       </div>
       <div class="stats">
         <div class="stat"><b>1 条主干</b><span>3D / 时空 / 多传感器 / 评测部署</span></div>
         <div class="stat"><b>4 条分叉</b><span>感知融合、预测规划、端到端、基础模型</span></div>
-        <div class="stat"><b>20 个 Notebook</b><span>系统契约到 L4 capstone</span></div>
+        <div class="stat"><b>26 个 Notebook</b><span>AD domain bridge 到 L4 capstone</span></div>
         <div class="stat"><b>6 个项目</b><span>从数据检查器到安全闭环与 VLA bridge</span></div>
         <div class="stat"><b>1 个标准</b><span>每个模型都必须回答“失败在哪里、如何上线”</span></div>
       </div>
@@ -392,18 +392,19 @@
 
     <section id="roadmap">
       <div class="section-head">
-        <div><h2>24 周路线：主干先就业，前沿再分叉</h2></div>
+        <div><h2>26 周路线：先补智驾背景，再进入 L4 主干</h2></div>
         <p class="section-intro">默认每周 12–18 小时；如果全职投入，可压缩到约 14–16 周。每个阶段都必须有可运行的代码、指标和失败分析，不以“看完课程”为完成条件。</p>
       </div>
       <div class="roadmap">
-        <article class="phase" data-phase="01"><div class="time">第 1–2 周 · ODD 与 AD 工具</div><h3>先写系统契约</h3><ul><li>ODD、模块输入输出、坐标系和时间预算。</li><li>SE(3)、相机模型、投影、ego motion。</li><li>Linux/Git/Docker、PyTorch 数据管线。</li><li>为一次 sensor bundle 写 contract validation。</li></ul></article>
-        <article class="phase" data-phase="02"><div class="time">第 3–5 周 · 3D 感知</div><h3>从 2D 进入 BEV/3D</h3><ul><li>2D/3D detection、tracking、segmentation。</li><li>LiDAR voxel/point、camera depth、BEV。</li><li>在 MMDetection3D/OpenPCDet 跑通 baseline。</li><li>做一次数据和坐标错误排查。</li></ul></article>
-        <article class="phase" data-phase="03"><div class="time">第 6–8 周 · 融合、时序与定位</div><h3>让模型看见同一个世界</h3><ul><li>camera-LiDAR BEVFusion 和 PyTorch Transformer。</li><li>时间同步、外参误差、遮挡和 modality dropout。</li><li>temporal memory、ego-motion compensation、GNSS/IMU/map matching。</li><li>报告 accuracy–latency–robustness trade-off。</li></ul></article>
-        <article class="phase" data-phase="04"><div class="time">第 9–12 周 · 预测、规划与闭环</div><h3>从看见到可执行轨迹</h3><ul><li>轨迹预测、交互、多模态分布。</li><li>行为规划、轨迹生成、车辆运动学和约束。</li><li>nuPlan/NAVSIM 的 log replay、open-loop 和 closed-loop 评测。</li><li>理解 rule-based、hybrid、learning planner。</li></ul></article>
-        <article class="phase" data-phase="05"><div class="time">第 13–15 周 · 场景与数据闭环</div><h3>让错误可以被重复测试</h3><ul><li>scenario contract、log replay、reactive agents。</li><li>场景 taxonomy、数据挖掘、hard negative、active learning。</li><li>collision、off-road、comfort、fallback latency 和 scenario coverage。</li><li>把每个 failure 变成 regression case。</li></ul></article>
-        <article class="phase" data-phase="06"><div class="time">第 16–18 周 · 安全与部署</div><h3>让模型能被安全地发布</h3><ul><li>ODD exit、fault monitor、degraded mode、minimal-risk maneuver。</li><li>规则 monitor 与 learned policy 的独立性。</li><li>ONNX/TensorRT 或等价 runtime、p50/p95/p99、watchdog。</li><li>报告安全、鲁棒性和实时性的联合 trade-off。</li></ul></article>
-        <article class="phase" data-phase="07"><div class="time">第 19–21 周 · E2E 与驾驶 foundation</div><h3>统一 perception–prediction–planning</h3><ul><li>阅读 TransFuser、UniAD、VAD/VADv2、GenAD。</li><li>做 camera-only waypoint policy 或轻量驾驶 Transformer。</li><li>加入 uncertainty、collision、comfort 和 route condition。</li><li>解释为什么 open-loop L2 不是安全结论。</li></ul></article>
-        <article class="phase" data-phase="08"><div class="time">第 22–24 周 · 前沿与求职</div><h3>把 VLM/VLA 接到 L4 接口</h3><ul><li>HF VLM、Diffusion、Robotics 课程。</li><li>LeRobot、OpenVLA、Octo、openpi。</li><li>VLM scene reasoning → structured driving condition。</li><li>完成 L4 capstone、整理 repo、实验表、失败案例和面试证据。</li></ul></article>
+        <article class="phase" data-phase="00"><div class="time">第 1–2 周 · AD domain bridge</div><h3>先学会读懂自动驾驶系统</h3><ul><li>ego、actor、scene、ODD 和 perception/tracking/prediction/planning/control 接口。</li><li>camera/LiDAR/radar/GNSS/IMU、坐标系、时间戳和 ego-motion。</li><li>BEV、occupancy、vector/map、agent state 的表示选择。</li><li>用 6 个 bridge notebook 完成领域 checkpoint，不重复通用深度学习。</li></ul></article>
+        <article class="phase" data-phase="01"><div class="time">第 3–4 周 · ODD、几何与系统契约</div><h3>先写系统契约</h3><ul><li>ODD、模块输入输出、坐标系和时间预算。</li><li>SE(3)、相机模型、投影、ego motion。</li><li>Linux/Git/Docker、PyTorch 数据管线。</li><li>为一次 sensor bundle 写 contract validation。</li></ul></article>
+        <article class="phase" data-phase="02"><div class="time">第 5–7 周 · 3D 感知</div><h3>从 2D 进入 BEV/3D</h3><ul><li>2D/3D detection、tracking、segmentation。</li><li>LiDAR voxel/point、camera depth、BEV。</li><li>在 MMDetection3D/OpenPCDet 跑通 baseline。</li><li>做一次数据和坐标错误排查。</li></ul></article>
+        <article class="phase" data-phase="03"><div class="time">第 8–10 周 · 融合、时序与定位</div><h3>让模型看见同一个世界</h3><ul><li>camera-LiDAR BEVFusion 和 PyTorch Transformer。</li><li>时间同步、外参误差、遮挡和 modality dropout。</li><li>temporal memory、ego-motion compensation、GNSS/IMU/map matching。</li><li>报告 accuracy–latency–robustness trade-off。</li></ul></article>
+        <article class="phase" data-phase="04"><div class="time">第 11–14 周 · 预测、规划与闭环</div><h3>从看见到可执行轨迹</h3><ul><li>轨迹预测、交互、多模态分布。</li><li>行为规划、轨迹生成、车辆运动学和约束。</li><li>nuPlan/NAVSIM 的 log replay、open-loop 和 closed-loop 评测。</li><li>理解 rule-based、hybrid、learning planner。</li></ul></article>
+        <article class="phase" data-phase="05"><div class="time">第 15–17 周 · 场景与数据闭环</div><h3>让错误可以被重复测试</h3><ul><li>scenario contract、log replay、reactive agents。</li><li>场景 taxonomy、数据挖掘、hard negative、active learning。</li><li>collision、off-road、comfort、fallback latency 和 scenario coverage。</li><li>把每个 failure 变成 regression case。</li></ul></article>
+        <article class="phase" data-phase="06"><div class="time">第 18–20 周 · 安全与部署</div><h3>让模型能被安全地发布</h3><ul><li>ODD exit、fault monitor、degraded mode、minimal-risk maneuver。</li><li>规则 monitor 与 learned policy 的独立性。</li><li>ONNX/TensorRT 或等价 runtime、p50/p95/p99、watchdog。</li><li>报告安全、鲁棒性和实时性的联合 trade-off。</li></ul></article>
+        <article class="phase" data-phase="07"><div class="time">第 21–23 周 · E2E 与驾驶 foundation</div><h3>统一 perception–prediction–planning</h3><ul><li>阅读 TransFuser、UniAD、VAD/VADv2、GenAD。</li><li>做 camera-only waypoint policy 或轻量驾驶 Transformer。</li><li>加入 uncertainty、collision、comfort 和 route condition。</li><li>解释为什么 open-loop L2 不是安全结论。</li></ul></article>
+        <article class="phase" data-phase="08"><div class="time">第 24–26 周 · 前沿与求职</div><h3>把 VLM/VLA 接到 L4 接口</h3><ul><li>HF VLM、Diffusion、Robotics 课程。</li><li>LeRobot、OpenVLA、Octo、openpi。</li><li>VLM scene reasoning → structured driving condition。</li><li>完成 L4 capstone、整理 repo、实验表、失败案例和面试证据。</li></ul></article>
         <article class="phase" data-phase="09"><div class="time">持续循环 · 数据飞轮</div><h3>形成自己的研究问题</h3><ul><li>每次错误都归类为 perception、data、temporal、planning、system 或 safety。</li><li>每个改动都保留 ablation 和回归结果。</li><li>每月追踪公开 JD 与新 benchmark。</li></ul></article>
       </div>
     </section>
@@ -411,9 +412,15 @@
     <section id="notebooks">
       <div class="section-head">
         <div><h2>交互式 Notebook：边学边验证</h2></div>
-        <p class="section-intro">20 个 notebook 把 L4 系统契约、Transformer、定位、场景回放、安全状态机和前沿模型串成一条可执行路线。每个 notebook 都包含概念讲解、可运行实验、参数调节和 TODO 习题。</p>
+        <p class="section-intro">26 个 notebook 先补自动驾驶领域背景，再把 L4 系统契约、Transformer、定位、场景回放、安全状态机和前沿模型串成一条可执行路线。每个 notebook 都包含概念讲解、最小 toy 场景、可运行实验、参数调节和 TODO 习题。</p>
       </div>
       <div class="grid">
+        <article class="card"><h4>00A · 智能驾驶系统全景</h4><p>建立 ego、actor、scene、ODD 和 perception/tracking/prediction/planning/control 的系统地图。</p><p class="small"><a href="notebooks/00a_autonomous_driving_system_overview.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>00B · 传感器、坐标系与时间</h4><p>用最小变换和时间错位实验理解 frame、extrinsic、timestamp 和 ego-motion。</p><p class="small"><a href="notebooks/00b_sensors_frames_and_time.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>00C · BEV / Occupancy / Scene Representation</h4><p>比较 occupancy、box、vector/map 和 agent state，并观察 resolution/dropout。</p><p class="small"><a href="notebooks/00c_bev_occupancy_and_scene_representation.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>00D · 时序场景状态与 Tracking</h4><p>从 noisy observation 走到带 ID、速度、age 和 uncertainty 的 agent state。</p><p class="small"><a href="notebooks/00d_temporal_scene_state_and_tracking.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>00E · Prediction → Planning → Control</h4><p>区分 prediction、planning、control，观察 open-loop 与 closed-loop 的差异。</p><p class="small"><a href="notebooks/00e_prediction_planning_control_closed_loop.ipynb">打开 Notebook →</a></p></article>
+        <article class="card"><h4>00F · 数据、安全、评测与部署</h4><p>把 scenario slice、failure、fallback、latency 和 regression gate 串成数据闭环。</p><p class="small"><a href="notebooks/00f_data_safety_evaluation_deployment.ipynb">打开 Notebook →</a></p></article>
         <article class="card"><h4>00 · ODD 与系统契约</h4><p>定义 ODD、sensor bundle contract、latency budget 和 NOMINAL/DEGRADED/MINIMAL_RISK/ODD_EXIT 状态。</p><p class="small"><a href="notebooks/00_odd_and_system_contract.ipynb">打开 Notebook →</a></p></article>
         <article class="card"><h4>01 · SE(3) / 标定 / 投影</h4><p>从传感器坐标系到车体坐标系和图像平面的变换，加入外参扰动并观察投影误差。</p><p class="small"><a href="notebooks/01_se3_calibration_projection.ipynb">打开 Notebook →</a></p></article>
         <article class="card"><h4>02 · BEV 融合鲁棒性</h4><p>用合成 camera/LiDAR 特征演示 feature fusion、modality dropout、时间错位和质量感知融合。</p><p class="small"><a href="notebooks/02_sensor_fusion_robustness.ipynb">打开 Notebook →</a></p></article>
@@ -435,7 +442,7 @@
         <article class="card"><h4>18 · Safety State Machine / Degraded Mode</h4><p>把传感器健康度、定位误差、TTC、planner disagreement 连接到降级和最小风险动作。</p><p class="small"><a href="notebooks/18_safety_state_machine_degraded_mode.ipynb">打开 Notebook →</a></p></article>
         <article class="card"><h4>19 · L4 Model Development Capstone</h4><p>比较 naive/guarded policy 的 collision、fallback、comfort、p95 latency 和 scenario coverage。</p><p class="small"><a href="notebooks/19_l4_model_development_capstone.ipynb">打开 Notebook →</a></p></article>
       </div>
-      <div class="callout" style="margin-top:18px"><b>完成标准：</b>每个 notebook 至少保留一张结果图、一段参数分析、一个失败案例和一个你自己实现的 TODO；Transformer notebook 还要记录参数量、token 数、attention 配置、seed 和 latency 测量方法。</div>
+      <div class="callout" style="margin-top:18px"><b>完成标准：</b>每个 notebook 至少保留一张结果图、一段参数分析、一个失败案例和一个你自己实现的 TODO；00A–00F 还要用自己的话解释领域术语、输入输出、失效模式和下一篇深入 Notebook；Transformer notebook 还要记录参数量、token 数、attention 配置、seed 和 latency 测量方法。</div>
       <div class="callout" style="margin-top:18px"><b>依赖边界：</b>基础 notebook 只需要 NumPy/SciPy；<code>requirements-ml.txt</code> 才加入 <code>torch</code>，Notebook 05 直接实现 PyTorch Transformer。Hugging Face <code>transformers</code> 放在 <code>requirements-frontier.txt</code>，用于 VLM/VLA/World Model 的预训练 backbone 和 processor，不为了调用一个 attention layer 而强制所有 notebook 安装它。项目维护参考见 <a href="PROJECT_REFERENCE.md">PROJECT_REFERENCE.md</a>，双角色审查流程见 <a href="review/README.md">Review Protocol</a>。</div>
     </section>
 
@@ -744,7 +751,7 @@ decision:
         <article class="card"><h4>数据、代码与评测</h4><p><a href="https://www.nuscenes.org/" target="_blank" rel="noopener">nuScenes</a> · <a href="https://waymo.com/open/" target="_blank" rel="noopener">Waymo Open</a> · <a href="https://github.com/open-mmlab/mmdetection3d" target="_blank" rel="noopener">MMDetection3D</a> · <a href="https://github.com/motional/nuplan-devkit" target="_blank" rel="noopener">nuPlan</a> · <a href="https://github.com/autonomousvision/navsim" target="_blank" rel="noopener">NAVSIM</a> · <a href="https://github.com/trust-ai/SafeBench" target="_blank" rel="noopener">SafeBench</a></p></article>
         <article class="card"><h4>前沿与机器人桥接</h4><p><a href="https://huggingface.co/learn/robotics-course/unit0/1" target="_blank" rel="noopener">HF Robotics</a> · <a href="https://github.com/huggingface/lerobot" target="_blank" rel="noopener">LeRobot</a> · <a href="https://github.com/Physical-Intelligence/openpi" target="_blank" rel="noopener">openpi</a> · <a href="https://github.com/openvla/openvla" target="_blank" rel="noopener">OpenVLA</a> · <a href="https://arxiv.org/html/2605.28544" target="_blank" rel="noopener">DriveWAM</a> · <a href="https://waymo.com/blog/2026/02/the-waymo-world-model-a-new-frontier-for-autonomous-driving-simulation/" target="_blank" rel="noopener">Waymo World Model</a></p></article>
       </div>
-      <p class="footnotes" style="margin-top:18px">说明：路线中“主线优先于前沿”“P0/P1/P2 优先级”“24 周时长”和具体项目组合是基于岗位要求、公开资源成熟度与学习投入的工程推断，不是任何公司招聘承诺。资料会随课程、仓库和职位更新，建议每月重新核查链接与版本。</p>
+      <p class="footnotes" style="margin-top:18px">说明：路线中“主线优先于前沿”“P0/P1/P2 优先级”“26 周时长”和具体项目组合是基于岗位要求、公开资源成熟度与学习投入的工程推断，不是任何公司招聘承诺。资料会随课程、仓库和职位更新，建议每月重新核查链接与版本。</p>
     </section>
 
     <footer class="footer">

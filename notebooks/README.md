@@ -1,6 +1,6 @@
 # Interactive Notebook Track
 
-这条路线把 HTML 教程中的关键接口做成可执行学习单元，并在原有机制教程之上补齐 L4 系统闭环。每个 Notebook 都包含概念解释、最小数学接口、可复现数据、参数扰动、失败案例和 TODO 习题。
+这条路线把 HTML 教程中的关键接口做成可执行学习单元，并在原有机制教程之上补齐 L4 系统闭环。它假设学习者已经有深度学习基础，优先补自动驾驶领域背景。每个 Notebook 都包含概念解释、最小数学接口、可复现数据、参数扰动、失败案例和 TODO 习题。
 
 ## 运行方式
 
@@ -11,7 +11,22 @@ jupyter lab
 
 `05_training_evaluation_baseline.ipynb` 使用 PyTorch，需要先安装 `requirements-ml.txt`。当前 `13–14` 是不下载大型 checkpoint 的 VLM/VLA 机制教学；只有把它们扩展为真实 Hugging Face backbone、processor 或公开 checkpoint 时，才需要 `requirements-frontier.txt`。GitHub 可以直接渲染并阅读 ipynb；交互控件和训练实验建议在本地 JupyterLab 中运行。
 
-## 推荐顺序与最低产出
+## A. AD domain bridge：先补智驾背景
+
+这 6 个 Notebook 不重新讲 Python、反向传播或通用优化器，而是把已有深度学习能力接到自动驾驶的问题空间。建议按顺序完成；每节约 1–3 小时，先理解领域接口，再进入后面的机制 Notebook。
+
+| 顺序 | Notebook | 领域入口 | 最低产出 |
+|---|---|---|---|
+| 00A | [智能驾驶系统全景](00a_autonomous_driving_system_overview.ipynb) | ego、actor、scene、ODD、模块接口 | 画出一条 sensor→control→safety 链路 |
+| 00B | [传感器、坐标系与时间](00b_sensors_frames_and_time.ipynb) | frame、pose、extrinsic、timestamp、ego-motion | 解释一个坐标或同步误差 |
+| 00C | [BEV / Occupancy / Scene Representation](00c_bev_occupancy_and_scene_representation.ipynb) | occupancy、box、vector、map、agent state | resolution/dropout 对 occupancy 的影响 |
+| 00D | [时序场景状态与 Tracking](00d_temporal_scene_state_and_tracking.ipynb) | observation、association、state、uncertainty | dropout/outlier 下的 track 报告 |
+| 00E | [Prediction → Planning → Control](00e_prediction_planning_control_closed_loop.ipynb) | trajectory、action、constraint、closed-loop | open/closed-loop gap 对比 |
+| 00F | [数据、安全、评测与部署](00f_data_safety_evaluation_deployment.ipynb) | scenario、slice、fallback、latency、regression | 一张 slice/gate 报告 |
+
+每个 bridge notebook 都指向下一篇深入 Notebook，避免“读完术语但不知道为什么要学它”。
+
+## B. 推荐顺序与最低产出
 
 | 顺序 | Notebook | 核心问题 | 最低产出 |
 |---|---|---|---|
@@ -40,7 +55,7 @@ jupyter lab
 
 ### 基础与系统接口
 
-`00–04`、`06–12`、`15–19` 默认以 NumPy/SciPy/pandas/Matplotlib 讲解几何、数据、评测和系统状态。这样可以在没有大型数据集和 GPU 的情况下验证接口与失败模式。
+`00A–00F`、`00–04`、`06–12`、`15–19` 默认以 NumPy/SciPy/pandas/Matplotlib 讲解自动驾驶领域接口、几何、数据、评测和系统状态。这样可以在没有大型数据集和 GPU 的情况下验证接口与失败模式。
 
 ### PyTorch learned-model track
 
@@ -58,5 +73,7 @@ jupyter lab
 2. 至少一个参数或数据扰动实验；
 3. 至少一个失败案例；
 4. 完成并解释所有 TODO，包括为什么你的实现不能直接上车。
+
+对 `00A–00F`，还必须留下一个领域 checkpoint：用自己的话解释术语、输入输出、失效模式，以及它连接到哪一个后续模型/评测 Notebook。
 
 Notebook 使用合成数据来保证可运行性；它们用于理解机制，不等价于在 nuScenes、Waymo、nuPlan 或 NAVSIM 上取得真实 benchmark 结果。进入真实数据阶段后，需要补充数据许可、坐标和时间契约、场景划分、闭环 runner、硬件 runtime 和版本回归。
