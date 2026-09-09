@@ -1,0 +1,9 @@
+# Optional VLM/VLA/World Model branch.
+# Install this after requirements.txt when you want to load pretrained
+# Transformer backbones or multimodal processors.
+-r requirements-ml.txt
+transformers>=4.45
+accelerate>=0.30
+safetensors>=0.4
+sentencepiece>=0.2
+einops>=0.7

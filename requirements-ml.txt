@@ -1,0 +1,3 @@
+# Learned-model track: Notebook 03 and Notebook 05.
+-r requirements.txt
+torch>=2.2,<3
