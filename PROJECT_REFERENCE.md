@@ -4,7 +4,7 @@
 
 从自动驾驶入门，再进入机器人操作与更广泛具身智能。学习者具有初步深度学习训练经验，尚无 RL 背景；每周约 26 小时。课程组织依据问题、因果实验与解释能力。
 
-当前交付三个单元、六份 notebook：路线跟踪/延迟恢复，坐标/测量/因果滤波，以及示范采集/行为克隆/闭环评测。底层车辆推进由 MetaDrive 完成；估计输入或模型输出、控制、实际动作与下一状态相连。交付清单见 `scripts/course_catalog.py`，阶段状态见 [PLAN.md](PLAN.md)。
+当前交付四个单元、八份 notebook：路线跟踪/延迟恢复，坐标/测量/因果滤波，示范采集/行为克隆/闭环评测，以及MDP/Bellman/REINFORCE速度选择。底层车辆推进由 MetaDrive 完成；估计输入或模型输出、控制、实际动作与下一状态相连。交付清单见 `scripts/course_catalog.py`，阶段状态见 [PLAN.md](PLAN.md)。
 
 ## 目录与依赖
 
@@ -15,6 +15,7 @@
 | src/ad_tutorial/driving.py | 实际驾驶闭环、控制和轨迹指标 |
 | src/ad_tutorial/estimation.py | SE(2)、合成测量与因果标量 Kalman |
 | src/ad_tutorial/imitation.py、requirements-learning.txt | CPU行为克隆、数据划分、共同窗口与固定Torch依赖 |
+| course/rl_foundations/、src/ad_tutorial/rl_foundations.py | 有限MDP、折扣策略梯度、真实速度选择与匹配评测 |
 | scripts/run_first_unit.py | 一次可复现的对照实验 |
 | scripts/build_active_units.py、course_catalog.py | 统一生成与已交付单元登记 |
 | requirements-driving.txt | 第一单元环境依赖（复用基础 notebook 依赖，加固定模拟器版本） |
@@ -45,6 +46,7 @@ python -m pytest tests -q
 python scripts/run_first_unit.py
 python scripts/run_state_estimation.py
 python scripts/run_imitation.py
+python scripts/run_rl_foundations.py
 python scripts/execute_notebooks.py
 git diff --check
 ```
@@ -54,6 +56,7 @@ git diff --check
 ## 证据与边界
 
 - 第一单元使用真值状态；第二单元从真值合成当前测量，滤波状态由历史测量更新，固定车道几何已知。视觉感知与复杂交通尚未接入。
+- BC与RL回到真值运动状态，以单独研究策略学习；RL只选纵向目标速度，执行器延迟队列对策略隐藏。训练采样策略与确定性部署评测分别标注。
 - 真实道路数据、公开 benchmark 和机器人硬件均待后续建设；外部资料链接是阅读入口。
 - 归档第 06/07 章混用了他车预测与自车轨迹，第 07 章 rollout 不消费 selected trajectory，第 10 章仅汇总旧 artifact；已从主线隔离并标注。
 - 归档 BEV occupancy 可由 LiDAR 输入复制；camera_points 是点集近似。保留代码是为机制学习和审查，不据此声称具备融合或真实 BEV 能力。
@@ -67,3 +70,4 @@ git diff --check
 | 2026-09-10 | 以 MetaDrive 第一单元重构主线；归档原材料；中文课程与教材路线；因果测试与新验证流程 | 9项测试、2份当前/14份归档 notebook 执行；[验证记录](review/2026-09-10-validation.md)与其中的独立审查 |
 | 2026-09-10 | 第二单元：坐标、测量、角度环绕与因果滤波；统一单元登记及执行 | 16项累计测试、4课执行与双审查修正；[验证记录](review/2026-09-10-state-validation.md) |
 | 2026-09-10 | 第三单元：专家示范、BC训练与共同窗口闭环评估 | [验证记录](review/2026-09-10-imitation-validation.md)及独立审查 |
+| 2026-09-10 | 第四单元：MDP与真实MetaDrive REINFORCE速度选择，三个模型种子和匹配对照 | [验证记录](review/2026-09-10-rl-validation.md)及独立审查 |

@@ -22,6 +22,13 @@ ACTIVE_UNITS = {
             "06_offline_vs_closed_loop.ipynb",
         ],
     },
+    "rl_foundations": {
+        "generator": "build_rl_foundations.py",
+        "notebooks": [
+            "07_mdp_bellman_returns.ipynb",
+            "08_policy_gradient_driving.ipynb",
+        ],
+    },
 }
 
 

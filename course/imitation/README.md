@@ -30,3 +30,5 @@
 2. [06 · 离线分数和闭环轨迹为什么会不一致？](06_offline_vs_closed_loop.ipynb)：重载模型实际控制车辆、自己的状态访问、covariate shift、共同时间窗口、失败原因和可编辑实验。
 
 选读 [DAgger](https://arxiv.org/abs/1011.0686) Introduction，限制在约 45 分钟。它帮助解释 learner-induced state distribution shift；本单元没有把 DAgger 或道路泛化写成已完成能力。
+
+接下来进入 [第四单元：RL基础](../rl_foundations/README.md)，学习如何从交互奖励更新策略，并与这里的监督动作拟合对照。
