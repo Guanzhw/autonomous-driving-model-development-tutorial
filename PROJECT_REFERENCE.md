@@ -4,16 +4,17 @@
 
 从自动驾驶入门，再进入机器人操作与更广泛具身智能。学习者具有初步深度学习训练经验，尚无 RL 背景；每周约 26 小时。课程组织依据问题、因果实验与解释能力。
 
-当前交付两个单元、四份 notebook：路线跟踪/延迟恢复，以及坐标/测量/因果滤波。底层车辆推进由 MetaDrive 完成；估计输入、控制、实际动作与下一状态相连。交付清单见 `scripts/course_catalog.py`，阶段状态见 [PLAN.md](PLAN.md)。
+当前交付三个单元、六份 notebook：路线跟踪/延迟恢复，坐标/测量/因果滤波，以及示范采集/行为克隆/闭环评测。底层车辆推进由 MetaDrive 完成；估计输入或模型输出、控制、实际动作与下一状态相连。交付清单见 `scripts/course_catalog.py`，阶段状态见 [PLAN.md](PLAN.md)。
 
 ## 目录与依赖
 
 | 位置 | 职责 |
 |---|---|
 | README.md | 学习入口、范围与下一步 |
-| course/first_loop/、course/state_estimation/ | 当前单元解释、实验与练习 |
+| course/first_loop/、course/state_estimation/、course/imitation/ | 当前单元解释、实验与练习 |
 | src/ad_tutorial/driving.py | 实际驾驶闭环、控制和轨迹指标 |
 | src/ad_tutorial/estimation.py | SE(2)、合成测量与因果标量 Kalman |
+| src/ad_tutorial/imitation.py、requirements-learning.txt | CPU行为克隆、数据划分、共同窗口与固定Torch依赖 |
 | scripts/run_first_unit.py | 一次可复现的对照实验 |
 | scripts/build_active_units.py、course_catalog.py | 统一生成与已交付单元登记 |
 | requirements-driving.txt | 第一单元环境依赖（复用基础 notebook 依赖，加固定模拟器版本） |
@@ -34,7 +35,7 @@
 
 ## 维护命令
 
-使用第一单元环境，按顺序执行：
+先安装requirements-driving.txt，再安装CPU依赖requirements-learning.txt，按顺序执行：
 
 ```powershell
 python scripts/build_active_units.py
@@ -43,6 +44,7 @@ python scripts/validate_project.py
 python -m pytest tests -q
 python scripts/run_first_unit.py
 python scripts/run_state_estimation.py
+python scripts/run_imitation.py
 python scripts/execute_notebooks.py
 git diff --check
 ```
@@ -64,3 +66,4 @@ git diff --check
 | 2026-09-09 | 原 11 core + 3 labs，共享点集与 artifact | 历史状态见 Git 与 review/initial-dual-review.md |
 | 2026-09-10 | 以 MetaDrive 第一单元重构主线；归档原材料；中文课程与教材路线；因果测试与新验证流程 | 9项测试、2份当前/14份归档 notebook 执行；[验证记录](review/2026-09-10-validation.md)与其中的独立审查 |
 | 2026-09-10 | 第二单元：坐标、测量、角度环绕与因果滤波；统一单元登记及执行 | 16项累计测试、4课执行与双审查修正；[验证记录](review/2026-09-10-state-validation.md) |
+| 2026-09-10 | 第三单元：专家示范、BC训练与共同窗口闭环评估 | [验证记录](review/2026-09-10-imitation-validation.md)及独立审查 |

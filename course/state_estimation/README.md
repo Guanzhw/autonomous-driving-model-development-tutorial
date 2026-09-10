@@ -33,3 +33,5 @@ RMSE 下降只说明估计轨迹更接近本次 truth。它可能因为滞后让
 - Simo Särkkä 与 Lennart Svensson：[Bayesian Filtering and Smoothing](https://users.aalto.fi/~ssarkka/pub/bfs_book_2023_online.pdf)，用于理解状态转移、测量模型和协方差。
 
 本单元不声称 synthetic noise 或标量滤波器代表真实车辆定位。下一步可研究异步观测、转弯运动模型、丢帧、标定和真实地图，再决定是否引入更复杂的模型。
+
+接下来进入 [第三单元：行为克隆](../imitation/README.md)，学习从专家示范训练策略。该单元回到真值状态输入，以单独研究拟合与闭环分布变化。

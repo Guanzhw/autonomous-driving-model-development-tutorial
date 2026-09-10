@@ -26,7 +26,7 @@
 
 ## 当前范围
 
-当前可执行主线覆盖前四周：反馈控制与[坐标和状态估计](course/state_estimation/README.md)，共四课。第二单元把带噪测量和因果滤波接入控制，比较估计误差与驾驶结果。BC/RL、真实数据评测、机械臂操作、生成式策略和 VLA 按[推进计划](PLAN.md)继续建设。
+当前可执行主线覆盖前六周：反馈控制、[坐标和状态估计](course/state_estimation/README.md)、[行为克隆](course/imitation/README.md)，共六课。第三单元完成示范采集、CPU训练、checkpoint重载与真实闭环评测，研究离线动作误差与驾驶表现的差异。RL、真实数据评测、机械臂操作、生成式策略和 VLA 按[推进计划](PLAN.md)继续建设。
 
 原 11 课与 3 个 Lab 已保留在参考区，已知缺口写在索引和 notebook 开头。新主线使用独立记录的 MetaDrive rollout；历史点云与 BEV 练习继续使用自己的 `urban_cut_in` artifact。两类结果的来源和用途在入口中分别说明。
 

@@ -15,6 +15,13 @@ ACTIVE_UNITS = {
             "04_state_estimation_closed_loop.ipynb",
         ],
     },
+    "imitation": {
+        "generator": "build_imitation.py",
+        "notebooks": [
+            "05_demonstrations_and_bc.ipynb",
+            "06_offline_vs_closed_loop.ipynb",
+        ],
+    },
 }
 
 
