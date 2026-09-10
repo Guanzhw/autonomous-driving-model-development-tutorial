@@ -1,59 +1,38 @@
-# Core Course · 11 Chapters
+# 学习路线
 
-这是仓库唯一的核心 syllabus。前提是：你已经掌握 Python、PyTorch、常见深度学习模型、反向传播、训练/验证和基本概率统计；课程把时间花在自动驾驶领域背景和模型工程接口上。
+先获得一个能解释的驾驶闭环，再逐步增加观测不确定性、学习型策略和更丰富的身体与任务。每一步都用实验回答一个具体问题。
 
-## 教学结构
+## 已实现的起点
 
-每章都遵循：
+**[第一单元：让一辆车跟住路线，并理解它为什么失败](first_loop/README.md)**
 
-```text
-领域问题 → shared urban cut-in scene → 最小接口 → 可运行实验
-→ 失败/扰动 → artifact → 下一章
-```
+观察 → 参考路线 → 反馈控制 → 仿真器执行 → 新观测。用同一场景比较正常控制、动作延迟和一次恢复方案。这个单元假设会 Python 和基本数组运算；所需几何、反馈与控制概念在单元中解释。
 
-不要把这些 notebook 当作 11 个互不相关的 demo。除 Chapter 01 的 optional nuScenes checkpoint 外，默认无需下载大型数据；Chapter 02–10 会在 `artifacts/urban_cut_in/` 里逐步产生和消费文件。
+每周 26 小时可以按“6 小时概念、10 小时实验、4 小时解释和整理、6 小时弹性”分配。先能复现，再能修改，最后能在一个新初始条件下预测和解释。
 
-## 路线与产出
+## 后续计划
 
-| Chapter | Notebook | 依赖前章 artifact | 本章留下的证据 |
-|---:|---|---|---|
-| 00 | [System & ODD](00_system_and_odd.ipynb) | — | `00_system_contract.json` |
-| 01 | [Sensors & Geometry](01_sensors_geometry.ipynb) | 00 的 scene contract | `01_geometry.json` |
-| 02 | [BEV & Fusion](02_bev_and_fusion.ipynb) | 01 的 frame/time semantics | `02_bev_dataset.npz` + metadata |
-| 03 | [Temporal State](03_temporal_state.ipynb) | shared scene | `03_temporal_state.npz` |
-| 04 | [Localization & Mapping](04_localization_mapping.ipynb) | 00 的 ODD pose threshold | `04_localization.npz` |
-| 05 | [Learnable BEV Model](05_learnable_bev_model.ipynb) | 02 的真实 BEV grid | `05_bev_model.pt` + runtime |
-| 06 | [Prediction](06_prediction.ipynb) | 03 的 tracked state | `06_prediction.npz` |
-| 07 | [Planning & Closed Loop](07_planning_closed_loop.ipynb) | 06 的 future modes | `07_planner.npz` |
-| 08 | [Data & Evaluation](08_data_and_evaluation.ipynb) | 07 的 plan + all contracts | `08_eval_report.json` |
-| 09 | [Safety & Runtime](09_safety_runtime.ipynb) | 05/08 的 evidence | `09_safety_runtime.json` |
-| 10 | [Capstone](10_capstone.ipynb) | 00–09 全部 artifact | portfolio-ready report skeleton |
+下表是约 24 周的方向安排；除第一单元外，后续主线尚待建设与验收。参考区的同名 notebook 可供选读，不代表对应阶段已经完成。
 
-## 如何运行
+| 时间 | 主问题 | 预期实验与教材 |
+|---|---|---|
+| 第 1–2 周 | 车辆为什么偏离，控制怎样恢复？ | 当前第一单元；TUM 控制选读 |
+| 第 3–4 周 | 传感器如何变成状态？ | 坐标、投影、时间、滤波；比较真值和估计输入 |
+| 第 5–6 周 | 专家数据拟合得好，自己开为什么仍失败？ | 同一驾驶场景的 BC、分布偏移与补充示范 |
+| 第 7–8 周 | 如何通过交互和奖励改进？ | tiny MDP、Bellman、策略梯度、PPO；CS 285 选读 |
+| 第 9–12 周 | 感知、预测与规划如何评估？ | 真实小样本、简单 baseline、模型到控制的因果对照 |
+| 第 13–16 周 | 汽车之外的身体带来什么问题？ | MIT 操作选章；运动学、接触、MuJoCo 示范与抓取 |
+| 第 17–20 周 | 动作序列与语言条件如何帮助策略？ | ACT / Diffusion Policy、小型 VLA 适配；固定任务对照 |
+| 第 21–24 周 | 如何完成一项小研究？ | 世界模型或 offline RL 选题、消融、失败分析与复现报告 |
 
-从仓库根目录打开 JupyterLab，并按 00→10 执行。Chapter 05 和 10 需要：
+导航、移动操作与腿式运动在完成基础后作为专题扩展。它们分别补充主动感知、长时序任务、平衡、步态与接触，不以模型名称代替这些知识。
 
-```bash
-python -m pip install -r requirements-ml.txt
-```
+## 每个单元的完成标准
 
-如果只想检查结构，不需要 torch：
+1. 能解释输入、状态、动作及其坐标、单位与时间关系。
+2. 能运行完整基线并说明指标如何由轨迹计算。
+3. 在运行前写下改动预期，运行后解释一致与不一致之处。
+4. 保存一个失败回放，并用对照支持原因判断。
+5. 给出本次实验适用的场景范围与下一步问题。
 
-```bash
-python scripts/validate_project.py
-```
-
-## Real-data checkpoint
-
-Chapter 01、02 和 08 都有明确的 nuScenes mini checkpoint。它们默认打印“数据未提供”而不会伪造结果；真正运行时需要：
-
-```bash
-python -m pip install -r requirements-real-data.txt
-export NUSCENES_ROOT=/path/to/nuscenes
-```
-
-运行后必须记录 dataset version、sample token、frame chain、timestamp policy、split 和结果文件。toy grid、toy metrics 和本仓库的 CPU latency 不能写成 nuScenes/量产证据。
-
-## 每章完成标准
-
-提交一张可解释图、一个参数/数据扰动、一个失败案例、所有 TODO 的解释，以及本章 artifact 的 schema。完成 Chapter 10 时，再补至少两个 ablation、一个 failure replay、open/closed-loop 对比和 p50/p95/p99 runtime 报告。
+[精选教材与论文](../reference/README.md) · [历史材料索引](../reference/legacy/README.md)

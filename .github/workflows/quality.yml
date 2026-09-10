@@ -9,17 +9,36 @@ jobs:
   structural-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install structural validator dependency
-        run: python -m pip install --disable-pip-version-check nbformat
-      - name: Check generated notebooks are reproducible
+      - name: Install notebook tools
+        run: python -m pip install nbformat
+      - name: Regenerate active and archived notebooks
         run: |
-          python scripts/build_course_notebooks.py
-          git diff --exit-code -- course labs
-      - name: Validate notebooks and maintenance artifacts
+          python scripts/build_first_unit.py
+          python scripts/build_legacy_materials.py
+          git diff --exit-code -- course reference/legacy
+      - name: Validate notebook syntax and local links
         run: python scripts/validate_project.py
+
+  driving-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install driving unit
+        run: python -m pip install -r requirements-driving.txt
+      - name: Test the control-to-environment loop
+        run: python -m pytest tests -q
+      - name: Execute the learning notebooks
+        run: python scripts/execute_notebooks.py
+      - name: Preserve executed notebooks and trajectories
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: driving-evidence
+          path: artifacts/

@@ -1,12 +1,15 @@
-# Public datasets and runners
+# 数据与仿真
 
-| Resource | Use in the course | Current evidence level |
+| 资源 | 当前用途 | 运行状态 |
 |---|---|---|
-| [nuScenes](https://www.nuscenes.org/) / [devkit](https://github.com/nutonomy/nuscenes-devkit) | Chapter 01/02/08 的 optional real-data checkpoint；多传感器、3D boxes、地图和时间链。 | 本仓库提供 adapter/checkpoint 形状；除非提交结果文件，不声称 benchmark 已复现。 |
-| [nuPlan](https://www.nuscenes.org/nuplan) | planning/log replay 和 closed-loop 公开入口。 | next integration target。 |
-| [NAVSIM](https://github.com/autonomousvision/navsim) | planning/simulation benchmark 入口。 | next integration target。 |
-| [CARLA](https://carla.org/) | 可控仿真和 failure replay。 | next integration target。 |
-| [Waymo Open Dataset](https://waymo.com/open/) | 大规模 perception/motion 数据；遵守许可。 | next integration target。 |
-| [MMDetection3D](https://github.com/open-mmlab/mmdetection3d) | 3D detection/BEV 代码生态参考。 | code reference，不等于本仓库依赖。 |
+| [MetaDrive](https://github.com/metadriverse/metadrive) | 第一单元的车辆动力学与闭环环境 | 单元依赖与命令见[第一单元](../course/first_loop/README.md)；验证结果见维护记录 |
+| [nuScenes](https://www.nuscenes.org/) | 后续坐标、传感器与真实数据练习 | 历史材料有 optional scaffolding；尚无固定真实数据结果 |
+| [NAVSIM](https://github.com/autonomousvision/navsim) | 后续规划与评估协议选读 | 尚未集成 runner；先核对 v1/v2 与 split |
+| [CARLA](https://carla.org/) / [Bench2Drive](https://github.com/Thinklab-SJTU/Bench2Drive) | 后续城市道路闭环实验 | 尚未集成；Python/API/引擎按 benchmark 固定 |
+| [LeRobot](https://huggingface.co/docs/lerobot/) | 后续操作数据、策略训练与评估 | 尚未集成；拟从 MuJoCo 与 ACT 小实验起步 |
 
-所谓 real-data checkpoint 至少要固定：dataset/version、sample/scenario ID、frame chain、timestamp policy、split、license、命令和输出 artifact。一个资源链接、一个 import 或一张手工截图都不构成公开 benchmark 结果。
+第一单元用仿真真值构造控制观测，当前不训练视觉感知。真实道路数据适合检验传感器、时间和分布；交互式仿真适合检验动作后果，两者在后续课程中分别安排。
+
+NAVSIM v1 用初始真实观测后固定计划进行短时推进；v2 pseudo-simulation 引入预生成偏移观测。使用时应写清协议，不能统称完整顺序交互式闭环。参见 [v1 论文](https://arxiv.org/abs/2406.15349)、[v2 论文](https://arxiv.org/abs/2506.04218)。
+
+每次使用公开数据固定版本、场景 ID、划分和许可；下载预算包括压缩包、解压、缓存、checkpoint 和录像。第一单元无需下载这些道路数据集。

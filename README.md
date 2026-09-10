@@ -1,103 +1,36 @@
-# Autonomous Driving Model Development Tutorial
+# 从自动驾驶开始学习具身智能
 
-从 **已有深度学习背景** 到 **Autonomous Driving Model Engineer** 的 11 课实战教程。项目补充的是智驾领域背景、数据形态、坐标/时间语义、系统接口、闭环评测和部署约束；不重复完整的 Python、反向传播或通用深度学习入门。
+从一辆车的闭环行为开始，逐步学习感知、状态估计、规划、控制、模仿学习和强化学习，再走向机器人操作与具身智能。教程面向有过深度学习训练经验、尚未学习 RL 的学习者，采用中文解释、公开教材选读和可复现的工程实验。
 
-## 你会构建什么
+## 从这里开始
 
-一条持续演化的 `urban cut-in` 实验链：
+**[第一单元：让一辆车跟住路线，并理解它为什么失败](course/first_loop/README.md)**
 
-```text
-raw camera/LiDAR
-  → frame / calibration / time
-  → BEV occupancy + risk
-  → temporal agent state
-  → learned BEV model
-  → prediction
-  → planning / closed loop
-  → scenario replay / corner-case slice
-  → safety gate / runtime
-  → capstone evidence
-```
+用 MetaDrive 运行车辆，通过参考路线和反馈控制产生动作，再从仿真器读取下一次观测。比较基线、执行延迟和恢复控制，留下真实运行产生的轨迹、指标与失败回放。
 
-Chapter 02 产生的 BEV 数据会被 Chapter 05 直接训练；Chapter 05 保存的 checkpoint 会被 Chapter 10 加载；中间的 state、prediction、planner、evaluation 和 safety artifact 会逐步落到 `artifacts/urban_cut_in/`。这使课程从“独立 demo 集合”变成一条可复核的模型开发闭环。
+这一单元约两周，每周预算 26 小时；实际进度以你能否解释实验为准。学习后应能回答：车辆为什么偏离？控制器如何纠正？动作延迟为什么改变反馈？一次修改有没有改善结果？
 
-合成实验属于 `toy-mechanism`：用于理解接口、机制和失败模式，不等价于真实车辆验证、安全认证或公开 benchmark 结果。Chapter 01、02、05、08 都包含 nuScenes mini 的 optional real-data checkpoint；需要数据、许可证和额外依赖，不会伪造结果。
-
-## 唯一学习入口
-
-| 入口 | 用途 |
+| 入口 | 何时使用 |
 |---|---|
-| [课程路线](course/README.md) | 11 个核心章节，唯一 syllabus |
-| [Advanced Labs](labs/README.md) | 3 个主线完成后的选修实验 |
-| [参考资料](reference/README.md) | glossary、metrics、datasets、公开课程和论文入口 |
-| [维护参考](PROJECT_REFERENCE.md) | 证据等级、维护规则和审查记录；面向 maintainer |
-| [Review Protocol](review/README.md) | Reviewer / Devil's Advocate 的审查门禁 |
-| [HTML landing page](index.html) | 仅做项目介绍和导航，不定义另一套课程路线 |
+| [起步单元](course/first_loop/README.md) | 阅读解释、配置环境、运行实验、完成练习 |
+| [课程路线](course/README.md) | 查看已实现内容与后续学习计划 |
+| [教材与论文](reference/README.md) | 按当前问题选择成熟教材，理解方法发展脉络 |
+| [原有材料](reference/legacy/README.md) | 有针对性地查阅几何、BEV、预测等历史练习 |
 
-## 核心课程
+## 怎样学习
 
-| # | Notebook | 主问题 | 关键产出 |
-|---:|---|---|---|
-| 00 | [System & ODD](course/00_system_and_odd.ipynb) | ODD、ego、actor、scene 和模块契约是什么？ | system contract |
-| 01 | [Sensors & Geometry](course/01_sensors_geometry.ipynb) | 传感器如何通过 frame、SE(3)、标定和时间进入模型？ | projection + calibration experiment |
-| 02 | [BEV & Sensor Fusion](course/02_bev_and_fusion.ipynb) | 为什么用 BEV/occupancy，错位如何传播？ | `02_bev_dataset.npz` |
-| 03 | [Temporal State](course/03_temporal_state.ipynb) | observation 如何变成稳定的 agent state？ | tracking state artifact |
-| 04 | [Localization & Mapping](course/04_localization_mapping.ipynb) | ego pose、漂移、GNSS outage 如何影响系统？ | localization report |
-| 05 | [Learnable BEV Model](course/05_learnable_bev_model.ipynb) | 如何训练有空间语义的 Transformer BEV query？ | `05_bev_model.pt` |
-| 06 | [Prediction](course/06_prediction.ipynb) | 多模态 agent future 如何评估并提供给 planner？ | ADE/FDE/miss-rate artifact |
-| 07 | [Planning & Closed Loop](course/07_planning_closed_loop.ipynb) | 预测如何影响 ego trajectory 和下一帧输入？ | planner + rollout |
-| 08 | [Data & Evaluation](course/08_data_and_evaluation.ipynb) | bundle → scenario → replay → metrics → corner slice 如何闭环？ | evaluation report |
-| 09 | [Safety & Runtime](course/09_safety_runtime.ipynb) | uncertainty、degraded mode 和 p99 latency 如何成为发布门禁？ | safety/runtime gate |
-| 10 | [Capstone](course/10_capstone.ipynb) | 如何加载前面 artifact，完成一次可面试的模型开发交付？ | end-to-end report |
+每次先看问题和基线，预测一次改动的结果，再运行对照并解释差异。保留失败案例，也保留不符合预期的结果。数学在问题需要时引入：先理解状态和反馈，再学习回报、Bellman 方程与策略优化。
 
-## Advanced Labs（可选）
+你可以读懂和修改关键控制代码，并在 notebook 中画图、设计对照。实验入口及依赖见[单元运行说明](course/first_loop/README.md)。默认起步不需要下载真实道路数据、预训练大模型或购买机器人。
 
-这些内容建立在 Chapter 06–10 的接口之上，不计入核心先修路线：
+## 当前范围
 
-- [Flow Matching / Action Chunk](labs/flow_matching_action_chunk.ipynb)
-- [VLM Structured Driving Conditions](labs/vlm_structured_driving_conditions.ipynb)
-- [VLA / WA / π0 Interface](labs/vla_world_action_interface.ipynb)
+当前可执行主线是第一单元。几何与状态估计、BC/RL、真实数据评测、机械臂操作、生成式策略和 VLA 的后续安排见[路线](course/README.md)，会按经过验证的单元逐步建设。
 
-## 依赖与运行
+原 11 课与 3 个 Lab 已保留在参考区，已知缺口写在索引和 notebook 开头。新主线使用独立记录的 MetaDrive rollout；历史点云与 BEV 练习继续使用自己的 `urban_cut_in` artifact。两类结果的来源和用途在入口中分别说明。
 
-```bash
-python -m venv .venv
-source .venv/bin/activate          # Windows 使用 .venv\\Scripts\\Activate.ps1
-python -m pip install -r requirements.txt
-jupyter lab
-```
+本单元提供仿真中可复核的跟踪与延迟实验。真实道路数据、复杂交通、学习型视觉策略和机器人硬件属于后续实践。
 
-Chapter 05 和 Chapter 10 的 checkpoint 路径需要 PyTorch：
+## 维护与验证
 
-```bash
-python -m pip install -r requirements-ml.txt
-```
-
-真实数据 checkpoint 需要单独下载并遵守 nuScenes 条款：
-
-```bash
-python -m pip install -r requirements-real-data.txt
-export NUSCENES_ROOT=/path/to/nuscenes
-```
-
-Advanced Labs 的真实预训练 VLM/VLA 扩展才需要 Hugging Face 依赖：
-
-```bash
-python -m pip install -r requirements-frontier.txt
-```
-
-`transformers` 不是 BEV、tracking、planning 或 attention 数学本身的必需依赖；Chapter 05 直接使用 PyTorch `TransformerEncoder` 和 `MultiheadAttention`，便于学习架构和训练接口。只有加载预训练 VLM/VLA backbone 时，才进入 Frontier 依赖层。
-
-## 推荐学习节奏
-
-1. 先读本 README 和 [course/README.md](course/README.md)，确认你已具备深度学习基础。
-2. 按 Chapter 00→10 顺序运行；不要先跳去 Flow Matching/VLM/VLA。
-3. 每章检查它保存的 artifact 是否存在，并回答 notebook 末尾的 domain checkpoint。
-4. Chapter 05 训练 checkpoint 后，再运行 Chapter 10；最后再选 Advanced Lab。
-5. 将 toy 结果替换为 nuScenes mini 固定样本或公开 runner，并记录数据版本、坐标/时间约定、seed、配置、指标、latency 和 failure replay。
-
-## 作品集完成标准
-
-最终提交应至少包含：可 clone 的环境和运行命令、数据/场景 schema、模型 checkpoint、open-loop 与 closed-loop 指标、至少两个 ablation、一个 failure replay、p50/p95/p99 runtime 报告，以及清楚的“toy mechanism ≠ L4 safety case”边界声明。
-
-更多维护约束见 [PROJECT_REFERENCE.md](PROJECT_REFERENCE.md)。
+维护者先读 [PROJECT_REFERENCE.md](PROJECT_REFERENCE.md)。生成 notebook、结构检查、执行验证和审查要求在那里统一记录。

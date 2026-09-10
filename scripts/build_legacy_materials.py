@@ -1,9 +1,4 @@
-"""Build the 11-course + 3-lab notebook track.
-
-The generator keeps the notebooks readable in GitHub while making the shared
-scene and artifact chain explicit.  Run it after editing this file; do not
-hand-edit generated JSON notebooks.
-"""
+"""Rebuild archived mechanism notebooks with their known limitations visible."""
 
 from __future__ import annotations
 
@@ -16,17 +11,14 @@ import nbformat as nbf
 
 
 ROOT = Path(__file__).resolve().parents[1]
-COURSE_DIR = ROOT / "course"
-LAB_DIR = ROOT / "labs"
 
 
 COMMON = '''
 from pathlib import Path
 import sys
 
-PROJECT_ROOT = Path.cwd()
-if not (PROJECT_ROOT / "src").exists():
-    PROJECT_ROOT = PROJECT_ROOT.parent
+PROJECT_ROOT = next(path for path in (Path.cwd(), *Path.cwd().parents)
+                    if (path / "src" / "ad_tutorial").is_dir())
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from ad_tutorial import (
@@ -65,10 +57,22 @@ def code(source: str) -> nbf.NotebookNode:
 
 
 def build_notebook(relative_path: str, cells: list[nbf.NotebookNode]) -> None:
-    path = ROOT / relative_path
+    path = ROOT / "reference" / "legacy" / relative_path
     path.parent.mkdir(parents=True, exist_ok=True)
+    notes = {
+        "course/02_bev_and_fusion.ipynb": "这里的 camera_points 是点集近似；LiDAR occupancy 同时进入输入和标签。比较模型时必须先计算复制 LiDAR 输入的 identity baseline。",
+        "course/05_learnable_bev_model.ipynb": "occupancy 标签可以直接从输入 LiDAR 通道复制；当前指标不能证明模型学会了图像到 BEV 或有效融合。",
+        "course/06_prediction.ipynb": "candidates 表示他车的可能未来，不能作为自车规划轨迹。此处 miss_rate 是跨 mode 的阈值比例，不能当成公开 benchmark 的跨样本 miss rate。",
+        "course/07_planning_closed_loop.ipynb": "选中的轨迹来自他车预测；下方 rollout 不消费它。这是保留供辨析的历史实现，学习闭环请使用新的起步单元。",
+        "course/08_data_and_evaluation.ipynb": "本节的简化评测不能用来验证第 05 章模型改善了驾驶行为；模型输出尚未进入此处的执行链。",
+        "course/10_capstone.ipynb": "本节加载模型后汇总旧 artifact；它没有用模型输出重新驱动规划、控制和评测，因此不构成端到端交付。",
+        "labs/vla_world_action_interface.ipynb": "动作、下一状态与 margin 是手工构造的接口例子；没有训练或加载 VLA / world model。",
+    }
+    caveat = notes.get(relative_path, "保留此材料用于局部机制学习；先修、结论与下游连接需要结合归档索引审查。")
+    archive = md("# 归档材料\n\n" + caveat +
+                 "\n\n[归档索引](../README.md) · [当前学习入口](../../../course/first_loop/README.md)")
     notebook = nbf.v4.new_notebook(
-        cells=cells,
+        cells=[archive, *cells],
         metadata={
             "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
             "language_info": {"name": "python", "version": "3"},
@@ -1237,21 +1241,20 @@ def course_09() -> list[nbf.NotebookNode]:
 def course_10() -> list[nbf.NotebookNode]:
     return [
         md('''
-        # 10 · Capstone：把模型、场景、闭环和 runtime 串成证据
+        # 10 · 归档审计：模型与报告之间还缺什么连接？
 
-        这是最后一课，合并旧版 `19`，但不再用主要手写的 naive/guarded policy 结束。它会验证前面生成的 artifact 链：
+        本节检查旧章节生成的文件，并运行一次 BEV 模型推理。下图区分实际执行和原设计中尚未执行的连接：
 
         ```text
-        02_bev_dataset.npz
-              ↓
-        05_bev_model.pt  →  BEV risk/occupancy inference
-              ↓
-        03 temporal state → 06 prediction → 07 planner
-              ↓
-        08 scenario replay/evaluation → 09 safety/runtime gate
+        实际执行：05_bev_model.pt → BEV risk/occupancy inference
+        实际执行：读取 03/06/07/08/09 的旧文件 → 汇总表
+
+        原设计设想（本节未执行）：
+        BEV inference --未连接--> prediction --未连接--> ego planner
+        ego planner --未连接--> env.step --未连接--> 新的闭环评测
         ```
 
-        合成结果不能声称实现了 L4；capstone 的目标是展示一个可 clone、可运行、可复核、可追问的模型开发闭环。
+        审计练习：找出实际推理调用和汇总表的输入。若要判断换模型后车是否开得更好，还需要在哪个函数中把模型输出送入规划，再调用 `env.step`？现有执行结果只支持文件可读取和推理可运行。
         '''),
         code(COMMON + '''
         import json
@@ -1469,7 +1472,7 @@ def build() -> None:
     }
     for relative_path, cells in notebooks.items():
         build_notebook(relative_path, cells)
-    print(f"built {len(notebooks)} canonical notebooks")
+    print(f"built {len(notebooks)} archived notebooks")
 
 
 if __name__ == "__main__":

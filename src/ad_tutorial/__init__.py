@@ -1,9 +1,4 @@
-"""Shared utilities for the urban cut-in tutorial.
-
-The package deliberately stays small and dependency-light.  The notebooks are
-the lesson; this package only prevents every lesson from inventing a different
-scene, coordinate convention, or artifact format.
-"""
+"""Driving lesson utilities and retained urban-cut-in reference exercises."""
 
 from .scene import (
     ARTIFACT_DIR,
@@ -18,6 +13,22 @@ from .scene import (
     save_json_artifact,
     save_numpy_artifact,
     scene_to_bev,
+)
+from .driving import (
+    METADRIVE_COMMIT,
+    DelayedActuator,
+    DrivingConfig,
+    DrivingObservation,
+    EpisodeResult,
+    GeometricController,
+    LaneReference,
+    ReferencePlanner,
+    build_metadrive_env,
+    observe_agent,
+    run_episode,
+    save_episode,
+    save_failure_gif,
+    save_replay_plot,
 )
 
 __all__ = [
@@ -34,4 +45,18 @@ __all__ = [
     "save_numpy_artifact",
     "scene_to_bev",
     "UrbanCutInScene",
+    "METADRIVE_COMMIT",
+    "DelayedActuator",
+    "DrivingConfig",
+    "DrivingObservation",
+    "EpisodeResult",
+    "GeometricController",
+    "LaneReference",
+    "ReferencePlanner",
+    "build_metadrive_env",
+    "observe_agent",
+    "run_episode",
+    "save_episode",
+    "save_failure_gif",
+    "save_replay_plot",
 ]

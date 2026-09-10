@@ -1,24 +1,26 @@
 # Working Agreement for Agents
 
-任何修改本仓库的 agent、reviewer 或维护者，先阅读 [`PROJECT_REFERENCE.md`](PROJECT_REFERENCE.md)。它是路线、证据等级、依赖边界和公开声明的单一维护参考。
+先阅读 [PROJECT_REFERENCE.md](PROJECT_REFERENCE.md)，确认当前实现、计划与证据。项目面向有初步深度学习经验、没有 RL 背景的学习者，从驾驶闭环逐步进入具身智能。
 
-## 修改前
+## 修改范围
 
-- 确认修改属于 11 课核心主线、3 个 Advanced Lab，还是维护工具；不要为了增加文件数量而新增内容。
-- 检查受影响的 Notebook、`course/README.md`、`labs/README.md`、`README.md`、`index.html` 和 requirements 是否需要同步。
-- 保持 `src/ad_tutorial/` 的 shared urban cut-in scene、坐标约定和 artifact schema；不要新增平行 toy pipeline。
-- 把合成实验、公开 benchmark 结果和系统证据分开，不把 toy result 写成真实车辆能力。
+- `course/first_loop/` 是当前可执行主线；后续路线先写清问题和验收再实现。
+- `reference/legacy/` 保留原 11 课与 3 个 Lab。已知错误标注必须随生成器保留；不能把它们重新标为完整主线。
+- 新主线复用 MetaDrive 的动力学与交互，控制器输出必须进入 `env.step`，指标来自实际轨迹。
+- `src/ad_tutorial/scene.py`、`bev_model.py` 服务归档材料，保留历史坐标/时间与 artifact 以供复查。
+- 变更路线或依赖时同步 README、course/README、单元说明、index.html、requirements 和维护参考。
+- Notebook 通过对应 `scripts/build_*.py` 生成，编辑生成源；生成必须可重复。
 
-## 修改后
+## 验证和审查
 
-- 运行相关 Notebook；路线或依赖变化时验证全部 14 个 canonical Notebook，并按 00→10 顺序执行不依赖外部数据的核心链。
-- Chapter 05/10 需要单独的 PyTorch smoke test；nuScenes checkpoint 只能在数据和许可准备后执行。
-- 运行 `git diff --check`，检查 HTML 的 Notebook 链接和依赖安装说明。
-- 让 `reviewer` 与 `devil's advocate` 独立审查；实现者不得替代任一角色签字。
-- 更新 `PROJECT_REFERENCE.md` 的缺口和变更日志，并在 [review/](review/) 中留下审查结果。
+- 运行结构与链接检查、受影响测试、当前两个 notebook 和 documented CLI。
+- 移动归档材料或修改其生成源时，检查全部 14 份语法与链接；影响运行路径时按旧 00→10 执行并单独核对 05/10 的 PyTorch 路径。原始领域缺陷按归档说明处理，不把执行通过称为技术正确。
+- 新增模型、指标、依赖、路线或公开表述，需 Reviewer 与 Devil's Advocate 独立审查；实现者保留最终判断并逐条回应。
+- 在 review/ 中记录实际命令、结果与未验证事项，更新 PROJECT_REFERENCE.md，运行 git diff --check。
 
-## 角色入口
+## 实现与复核
 
-- [Reviewer](review/roles/reviewer.md)：正确性、完整性、可运行性和岗位相关性。
-- [Devil's Advocate](review/roles/devils-advocate.md)：反方质疑、过度承诺、错误能力感和招聘经理视角。
-- [Review protocol](review/README.md)：触发条件、输出格式、优先级和合并门禁。
+- 非小型实现默认委派独立 `gpt-5.6-luna`（high 用于非简单任务）；主 agent 整合、检查与验证。
+- 非简单变更由独立 `gpt-5.6-terra` 审查；使用独立上下文 `fork_turns: none`。需要完整对话时用 `fork_turns: all` 并继承模型。
+- 数据、坐标、时间、单位在实际输入边界验证一次。避免没有实际消费者的抽象。
+- 保留失败、缺失数据和不确定性；让说明与运行证据相符。

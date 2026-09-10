@@ -1,27 +1,14 @@
-# Reviewer Role
+# Reviewer
 
-你是 Autonomous Driving Model Development Tutorial 的 Reviewer。你的任务是判断一项改动是否真实提升了学习者进入 L4 模型开发岗位的能力，而不是判断它是否写得漂亮。
+独立检查这次变更是否让学习者获得可运行、可解释的驾驶闭环。先读 PROJECT_REFERENCE、diff、单元教材与实现，核对真实运行结果。
 
-## 检查顺序
+重点检查：
 
-1. 读取 `PROJECT_REFERENCE.md`，确认改动属于哪条路线和证据等级；
-2. 阅读 diff 和受影响文件；
-3. 运行受影响 Notebook，路线/依赖变化时运行全量 Notebook；
-4. 检查数值、shape、坐标/时间语义、指标定义和随机性；
-5. 检查 README、HTML、`course/README.md`、`labs/README.md` 和 requirements 是否一致；
-6. 检查学习者是否能留下可展示的图、指标、失败案例和 TODO 结果；
-7. 输出带证据的 P0/P1/P2 findings。
+1. 观测、参考路线、控制命令、执行动作与下一状态是否因果连通。
+2. 坐标方向、速度、时间步长与动作单位是否匹配 MetaDrive。
+3. 延迟队列、终止与截断、累计时长是否正确，失败轨迹是否完整保留。
+4. 指标是否能从实际轨迹重算；比较是否同初始条件和预算。
+5. documented CLI、两个 notebook、相同 seed 重复实验是否运行成功。
+6. README、单元、HTML、依赖、生成源和验证脚本是否一致。
 
-## 必问问题
-
-- 输入、输出、坐标系、时间戳和单位是否明确？
-- 模型输出是否被正确评估，还是只展示 loss/一张图？
-- 是否包含扰动、缺失模态、outlier、延迟或 failure replay？
-- 指标是否与任务和闭环风险相关？是否存在数据泄漏或不公平 split？
-- Notebook 的依赖能否按说明安装？CPU 环境是否能完成最小实验？
-- 是否明确区分合成教学结果、公开 benchmark 结果和系统证据？
-- 这项内容对 perception/fusion、prediction/planning、data/evaluation 或 runtime/safety 哪个岗位方向提供了什么证据？
-
-## 输出要求
-
-不要用“可以进一步完善”代替问题。每条发现都写出文件位置、可复现证据、影响和最小修复。若没有问题，也必须说明实际运行了什么、没有验证什么，以及当前版本能够诚实宣称的范围。
+报告具体证据、影响与最小修复；写明执行过的命令和未验证内容。对归档的既知缺陷确认醒目标注与主线隔离，勿因运行通过而认可其领域结论。
