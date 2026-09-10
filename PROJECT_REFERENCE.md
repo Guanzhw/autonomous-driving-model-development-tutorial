@@ -4,17 +4,18 @@
 
 从自动驾驶入门，再进入机器人操作与更广泛具身智能。学习者具有初步深度学习训练经验，尚无 RL 背景；每周约 26 小时。课程组织依据问题、因果实验与解释能力。
 
-2026-09-10 重构将当前实现收敛为两个 notebook 组成的第一单元：路线跟踪、执行延迟与恢复。底层车辆推进由 MetaDrive 完成；观测、控制、实际动作与下一状态相连。后续 24 周方向在 [course/README.md](course/README.md) 中明确标为计划。
+当前交付两个单元、四份 notebook：路线跟踪/延迟恢复，以及坐标/测量/因果滤波。底层车辆推进由 MetaDrive 完成；估计输入、控制、实际动作与下一状态相连。交付清单见 `scripts/course_catalog.py`，阶段状态见 [PLAN.md](PLAN.md)。
 
 ## 目录与依赖
 
 | 位置 | 职责 |
 |---|---|
 | README.md | 学习入口、范围与下一步 |
-| course/first_loop/ | 当前单元解释、实验与练习 |
+| course/first_loop/、course/state_estimation/ | 当前单元解释、实验与练习 |
 | src/ad_tutorial/driving.py | 实际驾驶闭环、控制和轨迹指标 |
+| src/ad_tutorial/estimation.py | SE(2)、合成测量与因果标量 Kalman |
 | scripts/run_first_unit.py | 一次可复现的对照实验 |
-| scripts/build_first_unit.py | 当前 notebook 的生成源 |
+| scripts/build_active_units.py、course_catalog.py | 统一生成与已交付单元登记 |
 | requirements-driving.txt | 第一单元环境依赖（复用基础 notebook 依赖，加固定模拟器版本） |
 | reference/ | 精选教材、术语、数据与评测 |
 | reference/legacy/ | 原 14 份材料及具体缺陷说明 |
@@ -36,11 +37,12 @@
 使用第一单元环境，按顺序执行：
 
 ```powershell
-python scripts/build_first_unit.py
+python scripts/build_active_units.py
 python scripts/build_legacy_materials.py
 python scripts/validate_project.py
 python -m pytest tests -q
 python scripts/run_first_unit.py
+python scripts/run_state_estimation.py
 python scripts/execute_notebooks.py
 git diff --check
 ```
@@ -49,7 +51,7 @@ git diff --check
 
 ## 证据与边界
 
-- 新单元属于仿真机制实验，初始使用真值状态；视觉感知、学习型规划与复杂交通尚未接入。
+- 第一单元使用真值状态；第二单元从真值合成当前测量，滤波状态由历史测量更新，固定车道几何已知。视觉感知与复杂交通尚未接入。
 - 真实道路数据、公开 benchmark 和机器人硬件均待后续建设；外部资料链接是阅读入口。
 - 归档第 06/07 章混用了他车预测与自车轨迹，第 07 章 rollout 不消费 selected trajectory，第 10 章仅汇总旧 artifact；已从主线隔离并标注。
 - 归档 BEV occupancy 可由 LiDAR 输入复制；camera_points 是点集近似。保留代码是为机制学习和审查，不据此声称具备融合或真实 BEV 能力。
@@ -61,3 +63,4 @@ git diff --check
 |---|---|---|
 | 2026-09-09 | 原 11 core + 3 labs，共享点集与 artifact | 历史状态见 Git 与 review/initial-dual-review.md |
 | 2026-09-10 | 以 MetaDrive 第一单元重构主线；归档原材料；中文课程与教材路线；因果测试与新验证流程 | 9项测试、2份当前/14份归档 notebook 执行；[验证记录](review/2026-09-10-validation.md)与其中的独立审查 |
+| 2026-09-10 | 第二单元：坐标、测量、角度环绕与因果滤波；统一单元登记及执行 | 16项累计测试、4课执行与双审查修正；[验证记录](review/2026-09-10-state-validation.md) |

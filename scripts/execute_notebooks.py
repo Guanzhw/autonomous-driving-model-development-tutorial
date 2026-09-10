@@ -11,6 +11,7 @@ from pathlib import Path
 import nbformat
 from jupyter_client import KernelManager
 from nbclient import NotebookClient
+from course_catalog import ACTIVE_UNITS, notebook_paths
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,9 +19,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument(
         "--legacy", action="store_true", help="execute 11 archived chapters then 3 labs"
     )
+    selection.add_argument("--unit", choices=["all", *ACTIVE_UNITS], default="all")
     args = parser.parse_args()
     if args.legacy:
         base = ROOT / "reference" / "legacy"
@@ -28,14 +31,17 @@ def main() -> None:
             (base / "labs").glob("*.ipynb")
         )
     else:
-        paths = sorted((ROOT / "course" / "first_loop").glob("*.ipynb"))
+        paths = notebook_paths(args.unit)
     if not paths:
         raise RuntimeError("no notebooks found")
-    destination = (
-        ROOT / "artifacts" / "executed" / ("legacy" if args.legacy else "first_loop")
-    )
-    destination.mkdir(parents=True, exist_ok=True)
     for path in paths:
+        destination = (
+            ROOT
+            / "artifacts"
+            / "executed"
+            / ("legacy" if args.legacy else path.parent.name)
+        )
+        destination.mkdir(parents=True, exist_ok=True)
         notebook = nbformat.read(path, as_version=4)
         manager = KernelManager(kernel_name="python3")
         manager.kernel_spec.argv = [

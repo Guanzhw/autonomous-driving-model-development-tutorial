@@ -17,7 +17,7 @@ jobs:
         run: python -m pip install nbformat
       - name: Regenerate active and archived notebooks
         run: |
-          python scripts/build_first_unit.py
+          python scripts/build_active_units.py
           python scripts/build_legacy_materials.py
           git diff --exit-code -- course reference/legacy
       - name: Validate notebook syntax and local links

@@ -5,8 +5,10 @@ from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 import csv
 import importlib.metadata
+import importlib.util
 import json
 from pathlib import Path
+import sys
 from typing import Any
 
 import numpy as np
@@ -160,6 +162,10 @@ class EpisodeResult:
 
 
 def build_metadrive_env(config):
+    # On Windows, loading Panda3D before installed CPU Torch 2.10 makes c10.dll
+    # fail with WinError 1114. Initialize Torch first; import failures stay explicit.
+    if sys.platform == "win32" and importlib.util.find_spec("torch") is not None:
+        importlib.import_module("torch")
     from metadrive import MetaDriveEnv
 
     return MetaDriveEnv(
@@ -190,7 +196,38 @@ def build_metadrive_env(config):
     )
 
 
-def run_episode(config=None):
+def _observer_manifest(observer):
+    if observer is None:
+        return {"method": "truth", "config": None}
+    manifest = getattr(observer, "manifest", None)
+    if callable(manifest):
+        value = manifest()
+        if not isinstance(value, Mapping) or "method" not in value:
+            raise TypeError("observer.manifest() must return a mapping with method")
+        return dict(value)
+    return {"method": "custom", "config": {"protocol": "observe(truth, step, dt)"}}
+
+
+def _controller_observation(observer, truth, step, dt):
+    if observer is None:
+        return truth
+    observe = getattr(observer, "observe", None)
+    if not callable(observe):
+        raise TypeError("observer must provide observe(truth, step, dt)")
+    value = observe(truth, step, dt)
+    if not isinstance(value, DrivingObservation):
+        raise TypeError("observer.observe must return DrivingObservation")
+    return value
+
+
+def _reset_observer(observer, lane):
+    reset = getattr(observer, "reset", None)
+    if not callable(reset):
+        raise TypeError("observer must provide reset(lane)")
+    reset(lane)
+
+
+def run_episode(config=None, *, policy=None, observer=None):
     if config is None:
         config = DrivingConfig()
     elif isinstance(config, Mapping):
@@ -208,6 +245,8 @@ def run_episode(config=None):
     try:
         raw, _ = env.reset(seed=config.seed)
         lane = env.agent.lane
+        if observer is not None:
+            _reset_observer(observer, lane)
         initial = observe_agent(env.agent, lane)
         dt = float(
             env.config["decision_repeat"] * env.config["physics_world_step_size"]
@@ -227,6 +266,7 @@ def run_episode(config=None):
                 "observation_dim": int(np.asarray(raw).size),
             },
             "initial_state": asdict(initial),
+            "observer": _observer_manifest(observer),
             "reference_lane": {
                 "index": list(lane.index),
                 "length_m": float(lane.length),
@@ -241,8 +281,25 @@ def run_episode(config=None):
         }
         for step in range(config.horizon):
             before = observe_agent(env.agent, lane)
-            reference = planner.plan(before, lane)
-            command = controller.control(before, reference)
+            controller_input = _controller_observation(observer, before, step, dt)
+            measurement = (
+                controller_input
+                if observer is None
+                else getattr(observer, "last_measurement", None)
+            )
+            if not isinstance(measurement, DrivingObservation):
+                raise TypeError(
+                    "observer must set last_measurement to DrivingObservation"
+                )
+            reference = planner.plan(controller_input, lane)
+            active_policy = controller if policy is None else policy
+            control = getattr(active_policy, "control", None)
+            if not callable(control):
+                raise TypeError("policy must provide control(observation, reference)")
+            command = np.asarray(control(controller_input, reference), dtype=np.float32)
+            if command.shape != (2,) or not np.all(np.isfinite(command)):
+                raise ValueError("policy.control must return two finite action values")
+            command = np.clip(command, -1, 1).astype(np.float32)
             applied = actuator.push(command)
             _, reward, terminated, truncated, info = env.step(applied)
             after = observe_agent(env.agent, lane)
@@ -256,6 +313,22 @@ def run_episode(config=None):
                     "before_speed_mps": before.speed_mps,
                     "before_lateral_error_m": before.lane_lateral_m,
                     "before_longitudinal_m": before.lane_longitudinal_m,
+                    "input_x_m": controller_input.position[0],
+                    "input_y_m": controller_input.position[1],
+                    "input_heading_rad": controller_input.heading_rad,
+                    "input_speed_mps": controller_input.speed_mps,
+                    "input_lateral_error_m": controller_input.lane_lateral_m,
+                    "input_longitudinal_m": controller_input.lane_longitudinal_m,
+                    "input_lane_heading_rad": controller_input.lane_heading_rad,
+                    "input_lane_width_m": controller_input.lane_width_m,
+                    "measurement_x_m": measurement.position[0],
+                    "measurement_y_m": measurement.position[1],
+                    "measurement_heading_rad": measurement.heading_rad,
+                    "measurement_speed_mps": measurement.speed_mps,
+                    "measurement_lateral_error_m": measurement.lane_lateral_m,
+                    "measurement_longitudinal_m": measurement.lane_longitudinal_m,
+                    "measurement_lane_heading_rad": measurement.lane_heading_rad,
+                    "measurement_lane_width_m": measurement.lane_width_m,
                     "reference_x_m": reference.position[0],
                     "reference_y_m": reference.position[1],
                     "reference_heading_rad": reference.heading_rad,

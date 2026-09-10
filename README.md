@@ -14,6 +14,7 @@
 |---|---|
 | [起步单元](course/first_loop/README.md) | 阅读解释、配置环境、运行实验、完成练习 |
 | [课程路线](course/README.md) | 查看已实现内容与后续学习计划 |
+| [推进计划](PLAN.md) | 查看阶段交付、验收证据与后续建设顺序 |
 | [教材与论文](reference/README.md) | 按当前问题选择成熟教材，理解方法发展脉络 |
 | [原有材料](reference/legacy/README.md) | 有针对性地查阅几何、BEV、预测等历史练习 |
 
@@ -25,7 +26,7 @@
 
 ## 当前范围
 
-当前可执行主线是第一单元。几何与状态估计、BC/RL、真实数据评测、机械臂操作、生成式策略和 VLA 的后续安排见[路线](course/README.md)，会按经过验证的单元逐步建设。
+当前可执行主线覆盖前四周：反馈控制与[坐标和状态估计](course/state_estimation/README.md)，共四课。第二单元把带噪测量和因果滤波接入控制，比较估计误差与驾驶结果。BC/RL、真实数据评测、机械臂操作、生成式策略和 VLA 按[推进计划](PLAN.md)继续建设。
 
 原 11 课与 3 个 Lab 已保留在参考区，已知缺口写在索引和 notebook 开头。新主线使用独立记录的 MetaDrive rollout；历史点云与 BEV 练习继续使用自己的 `urban_cut_in` artifact。两类结果的来源和用途在入口中分别说明。
 

@@ -8,10 +8,10 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 import nbformat
+from course_catalog import ACTIVE_UNITS, notebook_paths
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ACTIVE = ROOT / "course" / "first_loop"
 ARCHIVE = ROOT / "reference" / "legacy"
 
 
@@ -28,12 +28,10 @@ def check_links(source: str, directory: Path, label: str) -> None:
 
 
 def main() -> None:
-    active = sorted(ACTIVE.glob("*.ipynb"))
+    active = notebook_paths()
     archived = sorted(ARCHIVE.rglob("*.ipynb"))
-    if len(active) != 2 or len(archived) != 14:
-        raise AssertionError(
-            f"expected 2 active + 14 archived notebooks, got {len(active)} + {len(archived)}"
-        )
+    if len(archived) != 14:
+        raise AssertionError(f"expected 14 archived notebooks, got {len(archived)}")
     if list((ROOT / "course").glob("*.ipynb")) or list((ROOT / "labs").glob("*.ipynb")):
         raise AssertionError("old notebooks remain outside the archive")
     for path in active + archived:
@@ -48,7 +46,10 @@ def main() -> None:
             raise AssertionError(f"{path}: missing archive notice")
 
     documents = list(ROOT.glob("*.md")) + [ROOT / "index.html"]
-    for directory in ("course", "reference", "labs", "notebooks", "review"):
+    documents.append(ROOT / "course" / "README.md")
+    for name in ACTIVE_UNITS:
+        documents.extend((ROOT / "course" / name).rglob("*.md"))
+    for directory in ("reference", "labs", "notebooks", "review"):
         documents.extend((ROOT / directory).rglob("*.md"))
     for path in documents:
         check_links(path.read_text(encoding="utf-8"), path.parent, str(path))
@@ -56,9 +57,9 @@ def main() -> None:
         for path in base.rglob("*.py"):
             ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
-    unit_index = (ACTIVE / "README.md").read_text(encoding="utf-8")
     archive_index = (ARCHIVE / "README.md").read_text(encoding="utf-8")
     for path in active:
+        unit_index = (path.parent / "README.md").read_text(encoding="utf-8")
         if path.name not in unit_index:
             raise AssertionError(f"active unit index misses {path.name}")
     for path in archived:
