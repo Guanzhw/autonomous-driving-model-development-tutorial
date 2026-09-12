@@ -11,6 +11,20 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "course" / "state_estimation"
 
 
+VISUAL = """
+<figure class="course-figure">
+  <img src="../../assets/visuals/state-estimation.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="原理图：世界坐标中的点经过 90 度自车坐标变换，合成测量再经过因果滤波进入控制器">
+  <a href="../../assets/visuals/state-estimation.png">查看原图</a>
+  <figcaption><strong>AI 原理图 · 手算/机制示意</strong> · 坐标轴、合成测量与因果滤波如何连接</figcaption>
+</figure>
+
+**坐标**：世界点 → 减去自车位置 → 逆旋转 → ego 坐标。**估计**：仿真真值 → 合成带噪测量 → 因果滤波 → 控制器。
+
+**手算检查**：车辆原点为 `(1,1)`、朝向 90°，世界点为 `(2,3)`。它在 ego frame 中的坐标是什么？
+<details><summary>展开答案</summary><p>相对位移是 <code>(1,2)</code>，用朝向的逆旋转后得到 <code>(2,-1)</code>。再设一维滤波预测值 <code>x⁻=2m</code>、测量 <code>z=4m</code>、<code>P⁻=R=1m²</code>，则 <code>K=.5</code>、后验 <code>x⁺=3m</code>；这些是教学设定。</p></details>
+"""
+
+
 def md(source: str):
     return nbf.v4.new_markdown_cell(source)
 
@@ -47,6 +61,7 @@ def frames_measurements():
 
 每周约 26 小时的学习节奏中，本课建议 2 小时读公式与手算，3 小时改噪声参数并解释图，剩余时间写一页“测量误差如何改变动作”的实验笔记。
 """),
+        md(VISUAL),
         code(SETUP),
         md("""
 ## 1. SE(2) 世界帧与自车帧
@@ -150,6 +165,7 @@ def closed_loop():
 
 滤波使用一维 random-walk Kalman：`P⁻=P+Q·dt`，`K=P⁻/(P⁻+R)`，`x=x⁻+K(z-x⁻)`。它假定一个决策间隔内状态近似平稳，用带单位的 Q 留出运动余量。它是教学模型，不能直接当作车辆定位方案。
 """),
+        md(VISUAL),
         code(SETUP),
         md("""
 ## 1. 两步手算：R、Q·dt、后验 P

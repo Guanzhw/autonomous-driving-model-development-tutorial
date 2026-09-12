@@ -25,6 +25,7 @@
 | src/ad_tutorial/scene.py、bev_model.py | 归档场景和 BEV 教学模型 |
 | requirements.txt、requirements-ml.txt 等 | 归档材料及其可选扩展依赖 |
 | review/ | 独立评审与实际验证记录 |
+| assets/visuals/ | 一张封面、四张含手算例子的 AI 原理图、生成提示词与素材哈希；运行图表仍保存到 artifacts/ |
 
 起步环境使用 Python 3.11。单元依赖中固定 MetaDrive 版本，训练/真实数据依赖按需要在独立环境安装。新单元不消费历史 `urban_cut_in` 文件，不复用旧报告作为新结果。
 
@@ -61,6 +62,7 @@ git diff --check
 - 归档第 06/07 章混用了他车预测与自车轨迹，第 07 章 rollout 不消费 selected trajectory，第 10 章仅汇总旧 artifact；已从主线隔离并标注。
 - 归档 BEV occupancy 可由 LiDAR 输入复制；camera_points 是点集近似。保留代码是为机制学习和审查，不据此声称具备融合或真实 BEV 能力。
 - 仿真渲染、依赖版本、主机与运行时间以实际验证记录为准；GPU 型号不等于已完成 GPU 训练。
+- 静态 AI 插图用于概念导读；精确坐标、动作队列、数据划分与指标以正文和实验代码为准。维护图片时保留提示词与文件哈希，并检查原图在网页和 notebook 中的相对路径。
 
 ## 变更记录
 
@@ -71,3 +73,4 @@ git diff --check
 | 2026-09-10 | 第二单元：坐标、测量、角度环绕与因果滤波；统一单元登记及执行 | 16项累计测试、4课执行与双审查修正；[验证记录](review/2026-09-10-state-validation.md) |
 | 2026-09-10 | 第三单元：专家示范、BC训练与共同窗口闭环评估 | [验证记录](review/2026-09-10-imitation-validation.md)及独立审查 |
 | 2026-09-10 | 第四单元：MDP与真实MetaDrive REINFORCE速度选择，三个模型种子和匹配对照 | [验证记录](review/2026-09-10-rl-validation.md)及独立审查 |
+| 2026-09-13 | 四张原理图解释延迟、坐标/滤波、BC与MDP/速度策略；接入网页、单元说明和八课导读，配手算答案 | 32测试、四CLI、八课执行、数值例子与生成一致性、桌面/手机显示、双审查；[验证记录](review/2026-09-13-visual-validation.md) |

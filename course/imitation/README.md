@@ -2,6 +2,16 @@
 
 本单元把第一单元的几何控制器当作可检查的专家，收集 MetaDrive 真值状态与专家动作，训练一个很小的 PyTorch MLP，再把 checkpoint 重载后放回同一个 `env.step` 闭环。学习者已经做过基础深度学习训练，因此重点放在数据边界、episode 切分、状态分布变化和闭环证据；这里不引入 RL。
 
+<figure class="course-figure">
+  <img src="../../assets/visuals/imitation-learning.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="原理图：专家车辆的完整驾驶 episode 先划分为训练验证测试集合，再训练模型并放回闭环">
+  <a href="../../assets/visuals/imitation-learning.png">查看原图</a>
+  <figcaption><strong>AI 原理图 · 手算/机制示意</strong> · 专家的完整 episode 先划分集合，再训练和闭环评测</figcaption>
+</figure>
+
+因果链是“专家完整 episode → 按 episode 划分 train/validation/test → 当前状态到动作的监督训练 → 重载策略 → `env.step` 闭环”。这样可以把离线拟合和车辆实际访问的新状态分开检查。
+
+**手算检查**：三条测试 episode 长度为 8、5、7，共同时间窗口长度是 5，即最短 episode；完整轨迹和各自失败信息仍单独保留。
+
 ## 运行
 
 在仓库根目录执行：

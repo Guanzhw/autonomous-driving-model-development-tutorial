@@ -2,6 +2,11 @@
 
 从一辆车的闭环行为开始，逐步学习感知、状态估计、规划、控制、模仿学习和强化学习，再走向机器人操作与具身智能。教程面向有过深度学习训练经验、尚未学习 RL 的学习者，采用中文解释、公开教材选读和可复现的工程实验。
 
+<figure class="course-figure">
+  <img src="assets/visuals/driving-lab.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="概念图：一辆车在道路上行驶，旁边是记录轨迹、控制和学习实验的小型研究工作台">
+  <figcaption><strong>AI 概念插图</strong> · 从驾驶闭环进入具身智能的学习工作台</figcaption>
+</figure>
+
 ## 从这里开始
 
 **[第一单元：让一辆车跟住路线，并理解它为什么失败](course/first_loop/README.md)**

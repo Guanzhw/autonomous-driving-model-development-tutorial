@@ -8,6 +8,20 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "course" / "first_loop"
 
 
+VISUAL = """
+<figure class="course-figure">
+  <img src="../../assets/visuals/feedback-loop.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="原理图：控制器产生的动作进入四步延迟队列，在第 4 步执行更早发出的动作">
+  <a href="../../assets/visuals/feedback-loop.png">查看原图</a>
+  <figcaption><strong>AI 原理图 · 手算/机制示意</strong> · 延迟机制预览（第02课）</figcaption>
+</figure>
+
+**因果链**：当前状态 → 控制器命令 → 延迟队列 → `env.step` 中实际执行的动作 → 下一状态。每个决策间隔 `Δt=0.1s`，`d=4` 对应 `0.4s`；零开始编号的 `t=4` 是第 5 个决策间隔，执行 `u[0]`，前 4 个间隔执行零动作。
+
+**手算检查**：若 `d=4`，第 4 步执行 `u[4]` 还是 `u[0]`？
+<details><summary>展开答案</summary><p>执行 <code>u[0]</code>。一般第 <code>t</code> 步执行 <code>u[t-d]</code>；前 4 个决策间隔执行零动作。</p></details>
+"""
+
+
 def md(source):
     return nbf.v4.new_markdown_cell(textwrap.dedent(source).strip())
 
@@ -43,6 +57,7 @@ def lesson1():
         本课目标是独立解释一条实际轨迹：参考从哪里来，动作如何计算，车辆为什么偏离又回来。
         假设会 Python、数组和基础三角函数；所需几何在下面解释，先不引入 RL。学习安排见 [单元说明](README.md)。
         """),
+        md(VISUAL),
         md("""
         ## 1. 把问题拆成五步
 
@@ -181,6 +196,7 @@ def lesson2():
         本课只改变命令到执行之间的时间，观察反馈何时失效，再在**相同延迟和初始状态**下尝试降低目标速度。
         你要给出一个有对照、有适用范围的结论。先完成 [上一课](01_drive_and_observe.ipynb) 的手算与复核。
         """),
+        md(VISUAL),
         code(SETUP),
         md("""
         ## 1. 延迟不是随机噪声

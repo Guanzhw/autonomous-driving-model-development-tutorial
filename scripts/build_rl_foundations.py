@@ -9,6 +9,35 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "course" / "rl_foundations"
 
 
+VISUAL = """
+<figure class="course-figure">
+  <img src="../../assets/visuals/reinforcement-learning.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="原理图：策略在每个决策周期选择 2 或 6 米每秒目标速度，几何转向和隐藏执行队列继续作用于车辆">
+  <a href="../../assets/visuals/reinforcement-learning.png">查看原图</a>
+  <figcaption><strong>AI 原理图 · 手算/机制示意</strong> · 纸上 MDP（γ=0.9）与驾驶速度选择</figcaption>
+</figure>
+
+**因果链**：先用纸上 MDP 理解回报与价值；再在驾驶任务中学习 2/6 m/s 速度选择。驾驶中的几何转向与隐藏执行队列继续作用于车辆。
+
+纸上 MDP 使用 γ=0.9，驾驶 REINFORCE 配置使用 γ=0.99；两者用于不同的教学检查。
+
+**手算检查**：`γ=0.9` 时，`G(short)=2`，`G(long)=1+0.9×4`。哪条路线回报更高？
+<details><summary>展开答案</summary><p>长路线回报为 4.6，高于短路线的 2。</p></details>
+"""
+
+VISUAL_MDP = """
+<figure class="course-figure">
+  <img src="../../assets/visuals/reinforcement-learning.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="原理图：纸上 MDP 的短路线与长路线连接到驾驶中的 2 或 6 米每秒速度选择，转向保持几何控制">
+  <a href="../../assets/visuals/reinforcement-learning.png">查看原图</a>
+  <figcaption><strong>AI 原理图 · 手算/机制示意</strong> · 纸上 MDP（γ=0.9）与驾驶速度选择</figcaption>
+</figure>
+
+**因果链**：先用纸上 MDP 理解回报与价值；再在驾驶任务中学习 2/6 m/s 速度选择 → REINFORCE 更新策略。
+
+**手算检查**：`γ=0.9` 时，`G(short)=2`，`G(long)=1+0.9×4`。哪条路线回报更高？
+<details><summary>展开答案</summary><p>长路线回报为 4.6，高于短路线的 2。</p></details>
+"""
+
+
 def md(source):
     return nbf.v4.new_markdown_cell(textwrap.dedent(source).strip())
 
@@ -37,6 +66,7 @@ def lesson07():
 
         先读代码前写下预测：`start` 选择 `short` 会得到多少回报？折扣系数 `γ=0.9` 时，`long` 为什么可能更好？有限 horizon 到达终点时是否需要猜一个未来价值？
         """),
+        md(VISUAL_MDP),
         code(SETUP + "\nmdp = teaching_mdp()\nprint(mdp)"),
         md("""
         ## 1. 手算一个确定性 MDP
@@ -150,6 +180,7 @@ def lesson08():
 
         本课使用模拟器特权真值（privileged truth），没有接入第二单元的带噪测量或滤波器，以单独研究策略更新。五个观测特征是车道横向误差、朝向误差、速度和两个速度误差；奖励从实际 trace 的纵向进度、横向误差和失败标志重算。4步执行队列没有放入这五个特征，因此这是部分可观测过程上的无记忆策略；REINFORCE在这个受限策略类中优化回报。
         """),
+        md(VISUAL),
         code(
             SETUP
             + "\nfrom dataclasses import replace\nfrom ad_tutorial.driving import DrivingConfig\nfrom ad_tutorial.rl_foundations import (SpeedChoicePolicy, FixedSpeedPolicy, run_policy_episode, trace_rewards, reinforce_loss, train_reinforce, save_checkpoint, load_checkpoint)"

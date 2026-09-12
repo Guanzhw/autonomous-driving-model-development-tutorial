@@ -1,6 +1,16 @@
 # 第二单元：坐标、测量与状态估计
 
-本单元把第一单元的真值驾驶闭环推进到一个明确的感知边界。学习者先用 SE(2) 逆变换核对 world/ego 坐标，再用固定 seed 生成带 bias 与 Gaussian noise 的 world pose/heading/speed 测量，使用已知固定车道投影 `s/e_y`，最后把一个因果的一维 random-walk Kalman filter 接进 planner/controller。
+本单元把第一单元的真值驾驶闭环推进到一个明确的感知边界。学习者先用 SE(2) 逆变换核对 world/ego 坐标，再用固定 seed 生成带 bias 与 Gaussian noise 的 world pose/heading/speed 测量，使用已知固定车道投影 `s/e_y`，最后把一个因果的一维 random-walk Kalman filter 接进控制器。
+
+<figure class="course-figure">
+  <img src="../../assets/visuals/state-estimation.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="原理图：世界坐标中的点经过 90 度自车坐标变换，合成测量再经过因果滤波进入控制器">
+  <a href="../../assets/visuals/state-estimation.png">查看原图</a>
+  <figcaption><strong>AI 原理图 · 手算/机制示意</strong> · 坐标帧、合成测量与因果滤波如何连接</figcaption>
+</figure>
+
+坐标：世界点 → 减去自车位置 → 逆旋转 → ego 坐标。估计：仿真真值 → 合成带噪测量 → 因果滤波 → 控制器。本单元先用可检查的坐标和测量模型，再把滤波状态接回实际闭环。
+
+**手算检查**：车辆原点为 `(1,1)`、朝向 90°，世界点为 `(2,3)`。它在 ego frame 中的坐标是 `(2,-1)`：相对位移 `(1,2)` 经过朝向的逆旋转得到该结果。再设一维滤波预测值 `x⁻=2m`、测量 `z=4m`、`P⁻=R=1m²`，则 `K=.5`、后验 `x⁺=3m`；这些是教学设定。
 
 ## 顺序与运行
 
@@ -19,7 +29,7 @@
 .venv\Scripts\python.exe scripts\run_state_estimation.py --output artifacts\state_estimation
 ```
 
-输出包含每组 JSON、CSV、轨迹 PNG、比较图和 `summary.json`。JSON manifest 显式写出 observer method、measurement config、seed、带单位的测量标准差与每秒过程方差 Q、decision dt 和初始真值；测量方差由 `R=标准差²` 得到。CSV 的 `before_*` 是评估用 truth，`measurement_*` 是当前原始测量，`input_*` 是 planner/controller 实际消费的估计状态。
+输出包含每组 JSON、CSV、轨迹 PNG、比较图和 `summary.json`。JSON manifest 显式写出 observer method、measurement config、seed、带单位的测量标准差与每秒过程方差 Q、decision dt 和初始真值；测量方差由 `R=标准差²` 得到。CSV 的 `before_*` 是评估用 truth，`measurement_*` 是当前原始测量，`input_*` 是控制器实际消费的估计状态。
 
 ## 读结果的规则
 

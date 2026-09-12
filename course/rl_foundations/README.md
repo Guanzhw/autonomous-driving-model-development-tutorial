@@ -4,6 +4,16 @@
 
 建议完成前三单元。本课继续使用模拟器特权真值（privileged truth），以隔离策略学习问题；第二单元的噪声和滤波器未接入。即使运动状态是真值，策略仍看不到延迟队列，五维输入不能视为完整Markov状态。
 
+<figure class="course-figure">
+  <img src="../../assets/visuals/reinforcement-learning.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="原理图：纸上 MDP 的短路线与长路线连接到驾驶中的 2 或 6 米每秒速度选择，转向保持几何控制">
+  <a href="../../assets/visuals/reinforcement-learning.png">查看原图</a>
+  <figcaption><strong>AI 原理图 · 手算/机制示意</strong> · 纸上 MDP（γ=0.9）与 2/6 m/s 速度选择</figcaption>
+</figure>
+
+先用纸上 MDP 理解回报与价值；再在驾驶任务中学习 2/6 m/s 速度选择。驾驶中的几何转向和隐藏执行队列继续作用于车辆。纸上 MDP 使用 γ=0.9，驾驶 REINFORCE 配置使用 γ=0.99，两者用于不同的教学检查。
+
+**手算检查**：`γ=0.9` 时，`G(short)=2`，`G(long)=1+0.9×4`。长路线回报为 4.6，高于短路线的 2。
+
 ## 学习顺序
 
 1. [07 · MDP、Bellman 方程与回报](07_mdp_bellman_returns.ipynb)：手写状态、转移和奖励，逐轮核对 Bellman 更新、回报和一个 Q-learning 增量更新。

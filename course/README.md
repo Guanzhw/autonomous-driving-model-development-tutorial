@@ -2,6 +2,11 @@
 
 先获得一个能解释的驾驶闭环，再逐步增加观测不确定性、学习型策略和更丰富的身体与任务。每一步都用实验回答一个具体问题。
 
+<figure class="course-figure">
+  <img src="../assets/visuals/driving-lab.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="概念图：驾驶闭环、状态估计、模仿学习和强化学习在同一学习工作台上逐步连接">
+  <figcaption><strong>AI 概念插图</strong> · 四个单元如何从驾驶闭环连接到具身智能</figcaption>
+</figure>
+
 ## 已实现的单元
 
 **[第一单元：让一辆车跟住路线，并理解它为什么失败](first_loop/README.md)**

@@ -11,6 +11,20 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "course" / "imitation"
 
 
+VISUAL = """
+<figure class="course-figure">
+  <img src="../../assets/visuals/imitation-learning.png" width="1536" height="1024" style="max-width:100%;height:auto" alt="原理图：专家车辆的完整驾驶 episode 先划分为训练验证测试集合，再训练模型并放回闭环">
+  <a href="../../assets/visuals/imitation-learning.png">查看原图</a>
+  <figcaption><strong>AI 原理图 · 手算/机制示意</strong> · 完整专家 episode 先划分集合，再训练并放回闭环</figcaption>
+</figure>
+
+**因果链**：专家完整 episode → 按 episode 划分 train/validation/test → 当前状态到动作的监督训练 → 重载策略 → `env.step` 闭环。
+
+**手算检查**：三条测试 episode 长度为 8、5、7，共同时间窗口长度是多少？
+<details><summary>展开答案</summary><p>是 5，即最短 episode 的长度。共同窗口用于公平比较，完整轨迹和各自失败信息仍单独保留。</p></details>
+"""
+
+
 def md(value):
     return nbf.v4.new_markdown_cell(textwrap.dedent(value).strip())
 
@@ -45,6 +59,7 @@ def lesson05():
 
         目标是能解释三件事：输入从哪里来、episode 为什么先切分再展平、离线 MSE 为什么不能代替闭环评测。所有运行结果保存在 `artifacts/imitation/`，先收集数据，再训练，再重载 checkpoint。
         """),
+        md(VISUAL),
         md("""
         ## 1. 先写数据契约
 
@@ -175,6 +190,7 @@ def lesson06():
 
         **前置课：Unit 02 状态估计。** 本课仍明确标记 privileged truth 的范围：它用于隔离行为克隆的训练与闭环问题，不能代表视觉或状态估计已经解决。
         """),
+        md(VISUAL),
         code(SETUP),
         md("""
         ## 1. 先确认你测的是什么

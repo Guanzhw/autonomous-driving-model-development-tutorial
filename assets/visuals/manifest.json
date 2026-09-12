@@ -1,0 +1,45 @@
+{
+  "created": "2026-09-13",
+  "assets": [
+    {
+      "file": "driving-lab.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "bytes": 2229882,
+      "sha256": "2c62b662f5045725c35b5cc817c1573d054e4f7e622167d09ed10bef98a72ca7"
+    },
+    {
+      "file": "feedback-loop.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "bytes": 1575389,
+      "sha256": "2ad92dd119b511f66a524a52d6a2b11b00226bcb164906887d9fca3d00438165"
+    },
+    {
+      "file": "imitation-learning.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "bytes": 1565626,
+      "sha256": "a9b7f82d1d30946ac05606af89766d9c70710c2434b92d2bd7d1a089c9e3742c"
+    },
+    {
+      "file": "reinforcement-learning.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "bytes": 1389217,
+      "sha256": "8c5221d2464f9eaa7eebc086fd347834fdbec709fa6f5eb378b66c89e9238a05"
+    },
+    {
+      "file": "state-estimation.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "bytes": 1372773,
+      "sha256": "1a2217a6f8705f6ce75d43f28489e63f5eebc17cb459bf3a0b5907eefd7c641b"
+    }
+  ]
+}
